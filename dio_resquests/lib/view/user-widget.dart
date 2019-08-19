@@ -1,5 +1,3 @@
-import 'dart:ui' as prefix0;
-
 import 'package:dio_resquests/model/user/user-bloc.dart';
 import 'package:dio_resquests/model/user/user-response.dart';
 import 'package:dio_resquests/model/user/user.dart';
@@ -20,22 +18,23 @@ class _UserWidgetState extends State<UserWidget> {
     return Container(
       child: StreamBuilder<UserResponse>(
         stream: bloc.subject.stream,
-        builder: (context, AsyncSnapshot<UserResponse> snapshot) {
-          if (snapshot.hasData) {
-            if (snapshot.data.error != null && snapshot.data.error.length > 0) {
-              return _buildErrorWidget(snapshot.data.error);
-            } else if (snapshot.data != null) {
-              //return _buildUserWidget(snapshot.data);
-              return _buildLoadingWidget();
-            }
-          } else if (snapshot.hasError) {
-            return _buildErrorWidget(snapshot.error);
-          } else {
-            return _buildLoadingWidget();
-          }
-        },
+        builder: _asyncWidgetBuilder,
       ),
     );
+  }
+
+  Widget _asyncWidgetBuilder(context, AsyncSnapshot<UserResponse> snapshot) {
+    if (snapshot.hasData) {
+      if (snapshot.data.error != null && snapshot.data.error.length > 0) {
+        return _buildErrorWidget(snapshot.data.error);
+      } else if (snapshot.data != null) {
+        return _buildUserWidget(snapshot.data);
+      }
+    } else if (snapshot.hasError) {
+      return _buildErrorWidget(snapshot.error);
+    } else {
+      return _buildLoadingWidget();
+    }
   }
 
   Widget _buildUserWidget(UserResponse data) {
@@ -46,17 +45,21 @@ class _UserWidgetState extends State<UserWidget> {
         mainAxisAlignment: MainAxisAlignment.center,
         children: <Widget>[
           userAvatar(user),
+          Padding(
+            padding: EdgeInsets.only(bottom: 8),
+          ),
           text(user.name.first, 35, Colors.white60),
+          Padding(
+            padding: EdgeInsets.only(bottom: 8),
+          ),
           text(user.name.last, 30, Colors.white60),
         ],
       ),
     );
   }
 
-  Widget _buildErrorWidget(String error) {
-    return Container(
-      child: Text("Error Found"),
-    );
+  Widget _buildErrorWidget(String err) {
+    return error(err);
   }
 
   Widget _buildLoadingWidget() {

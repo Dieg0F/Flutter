@@ -8,6 +8,7 @@ CircleAvatar userAvatar(User user) {
     child: CircleAvatar(
       radius: 65,
       backgroundImage: NetworkImage(user.picture.large),
+      backgroundColor: Colors.white,
     ),
   );
 }
@@ -16,6 +17,7 @@ Container text(String value, double fontSize, Color color) {
   return Container(
     child: Text(
       value,
+      textAlign: TextAlign.center,
       style: TextStyle(
         fontSize: fontSize,
         fontWeight: FontWeight.bold,
@@ -32,13 +34,20 @@ Container loading(String message) {
     child: Center(
       child: Container(
         width: 260.0,
-        height: 82.0,
+        height: 60.0,
         padding: EdgeInsets.all(16),
         child: Row(
           children: <Widget>[
-            CircularProgressIndicator(
-              backgroundColor: Colors.white,
-              strokeWidth: 2,
+            Padding(
+              padding: EdgeInsets.only(left: 4),
+            ),
+            SizedBox(
+              child: CircularProgressIndicator(
+                backgroundColor: Colors.white,
+                strokeWidth: 2,
+              ),
+              width: 30.0,
+              height: 30.0,
             ),
             Padding(
               padding: EdgeInsets.only(left: 16),
@@ -51,9 +60,33 @@ Container loading(String message) {
           borderRadius: BorderRadius.all(
             Radius.circular(5.0),
           ),
+          boxShadow: [
+            new BoxShadow(
+              color: Colors.black54,
+              offset: new Offset(0.0, 1.5),
+              blurRadius: 1.5,
+            )
+          ],
           shape: BoxShape.rectangle,
         ),
       ),
+    ),
+  );
+}
+
+Container error(String error) {
+  return Container(
+    child: Row(
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: <Widget>[
+        Container(
+          width: 280,
+          height: 280,
+          child: Center(
+            child: text(error, 35, Colors.white60),
+          ),
+        )
+      ],
     ),
   );
 }
