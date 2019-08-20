@@ -11,7 +11,6 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       title: 'Cars Dealer',
       debugShowCheckedModeBanner: false,
-      theme: ThemeData(primarySwatch: Colors.white),
       home: Cars(),
     );
   }
