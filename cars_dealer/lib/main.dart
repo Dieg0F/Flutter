@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-import 'widget/cars/cars.dart';
+import 'views/cars/cars.dart';
 
 void main() => runApp(MyApp());
 

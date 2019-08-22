@@ -1,8 +1,9 @@
-import 'dart:io';
-
+import 'package:camera_shots/model/picture.dart';
 import 'package:camera_shots/view/camera/widgets.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
+
+import 'image-options.dart';
 
 class Camera extends StatefulWidget {
   Camera({Key key}) : super(key: key);
@@ -11,20 +12,32 @@ class Camera extends StatefulWidget {
 }
 
 class _CameraState extends State<Camera> {
-  List<File> files = new List<File>();
-
+  List<Picture> pics = new List<Picture>();
+  int counter = 0;
   _CameraState() {
-    files = [];
+    pics = [];
   }
 
   Future getImage(ImageSource source) async {
-    var image = await ImagePicker.pickImage(source: source);
+    var imageFile = await ImagePicker.pickImage(source: source);
 
-    if (image != null) {
-      setState(() {
-        files.add(image);
-        print(image);
-      });
+    if (imageFile != null) {
+      counter++;
+      var pic = await ImageOptions(
+        imageFile,
+        sizeLimit: 1024,
+      ).toPicture(
+        "image_" + counter.toString(),
+        imageQuality: 60,
+        thumbnailWidth: 400,
+        thumbnailHeigth: 400,
+      );
+      if (pic != null) {
+        setState(() {
+          pics.add(pic);
+          print(pic);
+        });
+      }
     }
   }
 
@@ -47,9 +60,10 @@ class _CameraState extends State<Camera> {
     return Scaffold(
       appBar: AppBar(
         title: Text('Image Galery'),
+        elevation: 8,
       ),
       body: Center(
-        child: files.length == 0 ? emptyList() : photoGrid(files, context),
+        child: pics.length == 0 ? emptyList() : photoGrid(pics, context),
       ),
       floatingActionButton: addPhoto(getImage, context),
     );

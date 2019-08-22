@@ -1,27 +1,29 @@
 import 'dart:io';
 
+import 'package:camera_shots/model/picture.dart';
 import 'package:camera_shots/view/photoDetail/photo-detail.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
+
 import 'package:image_picker/image_picker.dart';
 
-GridView photoGrid(List<File> files, BuildContext context) {
+GridView photoGrid(List<Picture> pics, BuildContext context) {
   return GridView.count(
-    crossAxisCount: 2,
+    crossAxisCount: 4,
     cacheExtent: double.infinity,
     children: List.generate(
-      files.length,
+      pics.length,
       (index) {
         return InkResponse(
           onTap: () {
-            onItemTap(context, files[index]);
+            onItemTap(context, pics[index].originalFile);
           },
           onLongPress: () {
-            onItemTap(context, files[index]);
-          },                   
+            onItemTap(context, pics[index].originalFile);
+          },
           child: Padding(
-            padding: new EdgeInsets.all(2.0),
-            child: photoItem(files[index]),
+            padding: new EdgeInsets.all(0.5),
+            child: photoItem(pics[index].thumbnail),
           ),
         );
       },
@@ -70,6 +72,7 @@ Container emptyListIcon() {
 }
 
 Container photoItem(File file) {
+  print(file.path);
   return Container(
     child: Image.file(
       file,
