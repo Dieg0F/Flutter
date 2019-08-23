@@ -14,12 +14,10 @@ class ImageOptions {
   Image image;
   String localPath;
 
-  ImageOptions(File fileImage, {int sizeLimit}) {
-    print("File: " + fileImage.path);
-    print("sizeLimit: " + sizeLimit.toString());
+  ImageOptions(File fileImage, {int originalSize}) {
     Image imgObject = imagePgk.decodeJpg(fileImage.readAsBytesSync());
-    if (imgObject.width > sizeLimit) {
-      this.image = imagePgk.copyResize(imgObject, width: sizeLimit);
+    if (imgObject.width > originalSize) {
+      this.image = imagePgk.copyResize(imgObject, width: originalSize);
     } else {
       this.image = imgObject;
     }
@@ -28,45 +26,25 @@ class ImageOptions {
   Future<Picture> toPicture(
     String pictureName, {
     int imageQuality,
-    int thumbnailWidth,
-    int thumbnailHeigth,
+    int thumbSize,
   }) async {
     var pic = new Picture();
     pic.name = pictureName;
-    pic.originalFile = await buildFinalImage(
-      pic.name,
-      imageQuality: imageQuality,
-    );
-    pic.thumbnail = await buildThumbnailImage(pic.name,
-        width: thumbnailWidth, height: thumbnailHeigth);
+    pic.originalFile =
+        await buildFinalImage(pic.name, imageQuality: imageQuality);
+    pic.thumbnail = await buildThumbnailImage(pic.name, thumbSize: thumbSize);
 
     return pic;
   }
 
   Future<File> buildThumbnailImage(
     String pictureName, {
-    int width = 480,
-    int height = 480,
+    int thumbSize = 480,
     int imageQuality = 100,
   }) async {
     Image thumbnail;
 
-    if (this.image.width == this.image.height) {
-      thumbnail = imagePgk.copyResize(this.image, width: width, height: height);
-    } else {
-      var resizedImage = imagePgk.copyResize(this.image, width: width);
-      var positionToCrop = 0;
-      if (resizedImage.height <= height) {
-        thumbnail = resizedImage;
-      } else {
-        positionToCrop = (resizedImage.height / 2).round();
-        if (positionToCrop < resizedImage.height) {
-          positionToCrop = 0;
-        }
-        thumbnail =
-            imagePgk.copyCrop(resizedImage, 0, positionToCrop, width, height);
-      }
-    }
+    thumbnail = imagePgk.copyResizeCropSquare(this.image, thumbSize);
 
     var thumbnailPath = this.localPath +
         "/" +

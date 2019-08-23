@@ -25,12 +25,11 @@ class _CameraState extends State<Camera> {
       counter++;
       var pic = await ImageOptions(
         imageFile,
-        sizeLimit: 1024,
+        originalSize: 1024,
       ).toPicture(
         "image_" + counter.toString(),
         imageQuality: 60,
-        thumbnailWidth: 400,
-        thumbnailHeigth: 400,
+        thumbSize: 400,
       );
       if (pic != null) {
         setState(() {
