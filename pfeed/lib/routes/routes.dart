@@ -1,27 +1,27 @@
 import 'package:flutter/material.dart';
 import 'package:pfeed/models/profile.dart';
-import 'package:pfeed/views/home/home.dart';
-import 'package:pfeed/views/profile/profile.dart';
+import 'package:pfeed/views/details/details.dart';
+import 'package:pfeed/views/profiles/profiles.dart';
 
 class Routes {
   BuildContext context;
 
   Routes({@required this.context});
 
-  void toHome() {
+  void toProfiles() {
     Navigator.pushReplacement(
       context,
       MaterialPageRoute(
-        builder: (context) => Home(),
+        builder: (context) => Profiles(),
       ),
     );
   }
 
-  void toProfile(Profile profile) {
+  void toDetails(Profile profile) {
     Navigator.push(
       context,
       MaterialPageRoute(
-        builder: (context) => ProfileDetail(
+        builder: (context) => Details(
           profile: profile,
         ),
       ),

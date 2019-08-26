@@ -2,10 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:pfeed/models/profile.dart';
 import 'package:pfeed/views/widgets/widgets.dart';
 
-class ProfileWidget {
+class DetailsWidget {
   BuildContext context;
 
-  ProfileWidget(this.context);
+  DetailsWidget(this.context);
 
   Scaffold mainContent(Profile profile) {
     return Scaffold(
@@ -68,8 +68,5 @@ class ProfileWidget {
     );
   }
 
-  Container profilePhotos() {
-    
-  }
-
+  Container profilePhotos() {}
 }

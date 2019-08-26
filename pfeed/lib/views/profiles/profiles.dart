@@ -1,23 +1,23 @@
 import 'package:flutter/material.dart';
 import 'package:pfeed/models/profile.dart';
-import 'package:pfeed/views/home/home-widgets.dart';
+import 'package:pfeed/views/profiles/profiles-widgets.dart';
 import 'package:pfeed/views/widgets/widgets.dart';
 
-import 'home-bloc.dart';
+import 'profiles-bloc.dart';
 
-class Home extends StatefulWidget {
+class Profiles extends StatefulWidget {
   List<ProfileResponse> profiles = new List<ProfileResponse>();
 
-  Home() {
+  Profiles() {
     profiles = [];
   }
 
-  _HomeState createState() => _HomeState();
+  _ProfilesState createState() => _ProfilesState();
 }
 
-class _HomeState extends State<Home> {
-  _HomeState() {
-    homeBloc.getProfiles();
+class _ProfilesState extends State<Profiles> {
+  _ProfilesState() {
+    profilesBloc.getProfiles();
   }
 
   @override
@@ -25,7 +25,7 @@ class _HomeState extends State<Home> {
     return Scaffold(
       appBar: appBar("Perfis"),
       body: StreamBuilder<ProfileResponse>(
-        stream: homeBloc.subject.stream,
+        stream: profilesBloc.subject.stream,
         builder: _asyncWidgetBuilder,
       ),
     );
@@ -37,9 +37,9 @@ class _HomeState extends State<Home> {
         return Text("Error");
       } else if (snapshot.data != null) {
         if (snapshot.data.results.length == 0) {
-          return HomeWidget().emptyList();
+          return ProfilesWidget().emptyList();
         } else {
-          return HomeWidget(context: context)
+          return ProfilesWidget(context: context)
               .profileList(snapshot.data.results);
         }
       }

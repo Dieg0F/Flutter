@@ -17,7 +17,7 @@ Column content(BuildContext context) {
     children: <Widget>[
       basicText("Bem Vindo", 20, Colors.black),
       basicButton("LOGIN", action: () {
-        Routes(context: context).toHome();
+        Routes(context: context).toProfiles();
       }),
       basicText("with flutter", 10, Colors.black26),
     ],

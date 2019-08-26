@@ -1,7 +1,7 @@
 import 'package:pfeed/models/profile.dart';
 import 'package:pfeed/services/database/database.dart';
 
-class HomeRepository {
+class ProfilesRepository {
   Database _db = Database();
 
   Future<ProfileResponse> getProfiles() {

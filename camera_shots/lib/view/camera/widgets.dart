@@ -74,10 +74,13 @@ Container emptyListIcon() {
 Container photoItem(File file) {
   print(file.path);
   return Container(
-    child: Image.file(
-      file,
-      height: 200.0,
-      width: 200.0,
+    child: Opacity(
+      opacity: 0.5,
+      child: Image.file(
+        file,
+        height: 200.0,
+        width: 200.0,
+      ),
     ),
   );
 }

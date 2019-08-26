@@ -3,10 +3,10 @@ import 'package:pfeed/models/profile.dart';
 import 'package:pfeed/routes/routes.dart';
 import 'package:pfeed/views/widgets/widgets.dart';
 
-class HomeWidget {
+class ProfilesWidget {
   BuildContext context;
 
-  HomeWidget({this.context});
+  ProfilesWidget({this.context});
 
   Center emptyList() {
     return Center(
@@ -43,7 +43,7 @@ class HomeWidget {
           ),
         ),
         onTap: () {
-          Routes(context: context).toProfile(profile);
+          Routes(context: context).toDetails(profile);
         },
       ),
     );
