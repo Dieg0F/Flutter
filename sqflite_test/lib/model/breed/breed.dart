@@ -27,7 +27,7 @@ class BreedsResults {
 }
 
 class Breed {
-  String id;
+  int id;
   bool isActive;
   int weight;
   int size;
@@ -53,13 +53,13 @@ class Breed {
 
   factory Breed.fromMap(Map<String, dynamic> json) => new Breed(
         id: json["id"],
-        isActive: json["isActive"],
-        weight: json["weight"],
-        size: json["size"],
-        picture: json["picture"],
         name: json["name"],
         about: json["about"],
         registered: json["registered"],
+        size: json["size"],
+        weight: json["weight"],
+        picture: json["picture"],
+        isActive: json["isActive"] == 'true' ? true : false,
       );
 
   Map<String, dynamic> toMap() => {

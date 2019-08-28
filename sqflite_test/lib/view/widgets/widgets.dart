@@ -67,7 +67,7 @@ InputDecoration inputDecoration() {
     border: InputBorder.none,    
     hintStyle: TextStyle(
       color: Colors.black38,
-    ),
+    ),    
   );
 }
 

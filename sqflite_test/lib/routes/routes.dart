@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:sqflite_test/model/breed/breed.dart';
 import 'package:sqflite_test/view/add-breed/add-breed.dart';
 import 'package:sqflite_test/view/breeds-details/breed-details.dart';
 
@@ -7,11 +8,11 @@ class Routes {
 
   Routes({@required this.context});
 
-  void toBreedDetails() {
+  void toBreedDetails(Breed breed) {
     Navigator.push(
       context,
       MaterialPageRoute(
-        builder: (context) => BreedDetails(),
+        builder: (context) => BreedDetails(breed: breed),
       ),
     );
   }  
