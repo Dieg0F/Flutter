@@ -5,12 +5,70 @@ import 'package:sqflite_test/repository/breed-repository.dart';
 class BreedsBloc {
   final BreedRepository _repository = BreedRepository();
   final BehaviorSubject<List<Breed>> _subject = BehaviorSubject<List<Breed>>();
+  final BehaviorSubject<List<Breed>> _subjectAuxForRemoveItems =
+      BehaviorSubject<List<Breed>>();
+  final BehaviorSubject<bool> _subjectForEnableMultiSelect =
+      BehaviorSubject<bool>();
 
   getAllBreeds() async {
     print("BreedsBloc: getAllBreeds");
     List<Breed> response = await _repository.getAllBreeds();
     _subject.sink.add(response);
-  }  
+  }
+
+  removeBreeds() async {
+    List<Breed> breedList;
+    breedList = _subjectAuxForRemoveItems.value;
+    breedList.forEach((breed) async {
+      var res = await _repository.deleteBreed(breed.id);
+      if (res == 1) {
+        _subjectAuxForRemoveItems.value.remove(breed);
+        _subject.value.remove(breed);
+      } else {
+        _subjectAuxForRemoveItems.addError("Fudeu");
+      }
+    });
+  }
+
+  breedMultSelectEnable(Breed breed) {
+    print("BreedsBloc: breedMultSelectEnable");
+    var itemsList = new List<Breed>();
+    itemsList.add(breed);
+    _subjectAuxForRemoveItems.sink.add(itemsList);
+  }
+
+  breedItemSelected(Breed breed) {
+    print("BreedsBloc: breedItemSelected");
+    var itemsList = new List<Breed>();
+
+    if (_subjectAuxForRemoveItems.value != null) {
+      itemsList = _subjectAuxForRemoveItems.value;
+
+      if (!itemsList.contains(breed)) {
+        itemsList.add(breed);
+      } else {
+        itemsList.remove(breed);
+      }
+
+      if (_subjectAuxForRemoveItems.value.length == 0) {
+        enableMultiSelectItems(false);
+      } else {
+        _subjectAuxForRemoveItems.value = itemsList;
+      }
+    } else {
+      itemsList.add(breed);
+      _subjectAuxForRemoveItems.sink.add(itemsList);
+    }
+  }
+
+  enableMultiSelectItems(bool isEnabled) {
+    print("BreedsBloc: enableMultiSelectItems");
+    _subjectForEnableMultiSelect.value = isEnabled;
+    print(_subjectAuxForRemoveItems.value);
+    if (_subjectAuxForRemoveItems.value != null) {
+      _subjectAuxForRemoveItems.value = null;
+    }
+  }
 
   dispose() {
     print("BreedsBloc: dispose");
@@ -18,6 +76,10 @@ class BreedsBloc {
   }
 
   BehaviorSubject<List<Breed>> get subject => _subject;
+  BehaviorSubject<List<Breed>> get subjectAuxForRemoveItems =>
+      _subjectAuxForRemoveItems;
+  BehaviorSubject<bool> get subjectForEnableMultiSelect =>
+      _subjectForEnableMultiSelect;
 }
 
 final bloc = BreedsBloc();

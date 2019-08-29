@@ -26,4 +26,8 @@ class BreedDao {
     return "INSERT Into Breed (name, about, registered, size, weight, picture, isActive)" +
         " VALUES ('${newBreed.name}', '${newBreed.about}', '${newBreed.registered}', '${newBreed.size}', '${newBreed.weight}', '${newBreed.picture}','${newBreed.isActive}')";
   }
+
+  String deleteBreed(int breedId) {
+    return "DELETE FROM Breed WHERE id = '$breedId'";
+  }
 }

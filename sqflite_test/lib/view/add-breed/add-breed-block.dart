@@ -27,8 +27,12 @@ class AddBreedBloc {
       _subject.addError("Insert a medium size for this breed.");
     } else if (newBreed.about == null) {
       _subject.addError("Insert a basic description for this breed.");
-    } else if (newBreed.picture == "" || newBreed.picture == "null") {
+    } else if (newBreed.picture == "null" ||
+        newBreed.picture == "" ||
+        newBreed.picture == null) {
       newBreed.picture = "";
+      _subject.sink.add(await _repository.insertBreed(newBreed));
+    } else {
       _subject.sink.add(await _repository.insertBreed(newBreed));
     }
   }

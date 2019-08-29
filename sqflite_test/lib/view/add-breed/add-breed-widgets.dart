@@ -27,16 +27,16 @@ class AddBreedWidgets {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: <Widget>[
-          //basicText("Add a new breed!", 22, Colors.black45),
-          //spaceHorizontal(24),
+          basicText("Add a new breed!", 22, Colors.black45),
+          spaceHorizontal(24),
           inputRow("Name: ", inputName()),
-          //spaceHorizontal(8),
+          spaceHorizontal(8),
           inputRow("Weight: ", inputWeight()),
-          //spaceHorizontal(8),
+          spaceHorizontal(8),
           inputRow("Size: ", inputSize()),
-          //spaceHorizontal(8),
+          spaceHorizontal(8),
           inputColumn("About: ", inputAbout()),
-          //spaceHorizontal(16),
+          spaceHorizontal(16),
           inputPicture()
         ],
       ),
@@ -47,14 +47,15 @@ class AddBreedWidgets {
     return Container(
       child: Row(
         children: <Widget>[
-          //basicText(label, 20, Colors.black45),
+          basicText(label, 20, Colors.black45),
           Container(
-            child: textField,
-            height: 150,
+            child: new Flexible(
+              child: textField,
+            ),
           ),
         ],
       ),
-      height: 150,
+      height: 50,
     );
   }
 
@@ -63,14 +64,15 @@ class AddBreedWidgets {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: <Widget>[
-          //basicText(label, 20, Colors.black45),
+          basicText(label, 20, Colors.black45),
           Container(
-            child: textField,
-            height: 150,
+            child: new Flexible(
+              child: textField,
+            ),
           ),
         ],
       ),
-      height: 250,
+      height: 200,
     );
   }
 

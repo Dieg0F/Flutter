@@ -1,7 +1,9 @@
 import 'dart:io';
 
+import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
 import 'package:sqflite_test/model/breed/breed.dart';
+import 'package:sqflite_test/routes/routes.dart';
 import 'package:sqflite_test/view/widgets/widgets.dart';
 
 class BreedDetailsWidgets {
@@ -24,31 +26,58 @@ class BreedDetailsWidgets {
 
   Container breedImage(String imagePath) {
     if (imagePath == "") {
-      return Container(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: <Widget>[
-            Icon(
-              Icons.camera,
-              color: Colors.black38,
-            ),
-            spaceHorizontal(8),
-            basicText("No Picture", 20, Colors.black38)
-          ],
-        ),
-        color: Colors.red,
-        width: MediaQuery.of(context).size.width,
-        height: MediaQuery.of(context).size.height * 0.3,
-      );
+      return emptyImage();
     } else {
-      return Container(
-        child: Image.file(
-          File(imagePath),
-          width: MediaQuery.of(context).size.width,
-          height: MediaQuery.of(context).size.height * 0.3,
-        ),
-      );
+      return imageSlider(imagePath);
     }
+  }
+
+  Container imageSlider(String imagePath) {
+    return Container(
+      child: CarouselSlider(
+        height: MediaQuery.of(context).size.height * 0.3,
+        items: [1].map((i) {
+          return Builder(
+            builder: (BuildContext context) {
+              return InkResponse(
+                onTap: () {
+                  Routes(context: context).toSlider(imagePath);
+                },
+                child: Container(
+                  width: MediaQuery.of(context).size.width,
+                  margin: EdgeInsets.symmetric(horizontal: 0.0),
+                  decoration: BoxDecoration(
+                    color: Colors.black,
+                  ),
+                  child: Image.file(
+                    File(imagePath),
+                  ),
+                ),
+              );
+            },
+          );
+        }).toList(),
+      ),
+    );
+  }
+
+  Container emptyImage() {
+    return Container(
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: <Widget>[
+          Icon(
+            Icons.camera,
+            color: Colors.black38,
+          ),
+          spaceHorizontal(8),
+          basicText("No Picture", 20, Colors.black38)
+        ],
+      ),
+      color: Colors.red,
+      width: MediaQuery.of(context).size.width,
+      height: MediaQuery.of(context).size.height * 0.3,
+    );
   }
 
   Container breedDescription(Breed breed) {

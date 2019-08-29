@@ -64,10 +64,10 @@ TextStyle inputTextStyle() {
 
 InputDecoration inputDecoration() {
   return InputDecoration(
-    border: InputBorder.none,    
+    border: InputBorder.none,
     hintStyle: TextStyle(
       color: Colors.black38,
-    ),    
+    ),
   );
 }
 
