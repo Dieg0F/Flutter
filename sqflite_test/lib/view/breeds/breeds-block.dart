@@ -17,13 +17,18 @@ class BreedsBloc {
   }
 
   removeBreeds() async {
+    print("removeBreeds: breedMultSelectEnable");
     List<Breed> breedList;
     breedList = _subjectAuxForRemoveItems.value;
     breedList.forEach((breed) async {
+      print("Breed to remove: " + breed.id.toString());
       var res = await _repository.deleteBreed(breed.id);
       if (res == 1) {
-        _subjectAuxForRemoveItems.value.remove(breed);
-        _subject.value.remove(breed);
+        var newList = _subject.value;
+        newList.remove(breed);
+        _subject.value = newList;
+        enableMultiSelectItems(false);
+        print("Success!");
       } else {
         _subjectAuxForRemoveItems.addError("Fudeu");
       }
@@ -38,7 +43,7 @@ class BreedsBloc {
   }
 
   breedItemSelected(Breed breed) {
-    print("BreedsBloc: breedItemSelected");
+    print("BreedsBloc: breedItemSelected: " + breed.name);
     var itemsList = new List<Breed>();
 
     if (_subjectAuxForRemoveItems.value != null) {
@@ -62,7 +67,7 @@ class BreedsBloc {
   }
 
   enableMultiSelectItems(bool isEnabled) {
-    print("BreedsBloc: enableMultiSelectItems");
+    print("BreedsBloc: enableMultiSelectItems: " + isEnabled.toString());
     _subjectForEnableMultiSelect.value = isEnabled;
     print(_subjectAuxForRemoveItems.value);
     if (_subjectAuxForRemoveItems.value != null) {
