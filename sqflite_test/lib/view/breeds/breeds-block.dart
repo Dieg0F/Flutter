@@ -22,16 +22,12 @@ class BreedsBloc {
     breedList = _subjectAuxForRemoveItems.value;
     breedList.forEach((breed) async {
       print("Breed to remove: " + breed.id.toString());
-      var res = await _repository.deleteBreed(breed.id);
-      if (res == 1) {
-        var newList = _subject.value;
-        newList.remove(breed);
-        _subject.value = newList;
-        enableMultiSelectItems(false);
-        print("Success!");
-      } else {
-        _subjectAuxForRemoveItems.addError("Fudeu");
-      }
+      await _repository.deleteBreed(breed.id);
+      var newList = _subject.value;
+      newList.remove(breed);
+      _subject.value = newList;
+      print("Success!");
+      enableMultiSelectItems(false);
     });
   }
 

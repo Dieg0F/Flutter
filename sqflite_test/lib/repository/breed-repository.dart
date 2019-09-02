@@ -14,8 +14,8 @@ class BreedRepository {
     return list.map<Breed>((c) => Breed.fromMap(c)).toList();
   }
 
-  Future<Breed> getBreedById(Breed breed) async {
-    var list = await DBProvider.db.select(breedDao.getBreedById(breed));
+  Future<Breed> getBreedById(int breedId) async {
+    var list = await DBProvider.db.select(breedDao.getBreedById(breedId));
 
     return list.map<Breed>((c) => Breed.fromMap(c)).toList();
   }
@@ -28,5 +28,9 @@ class BreedRepository {
 
   Future<int> deleteBreed(int breedId) async {
     await DBProvider.db.delete(breedDao.deleteBreed(breedId));
+  }
+
+  Future<int> updateBreed(Breed breed) async {
+    await DBProvider.db.update(breedDao.updateBreed(breed));
   }
 }

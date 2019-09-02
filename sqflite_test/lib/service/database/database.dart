@@ -2,8 +2,6 @@ import 'dart:io';
 
 import 'package:sqflite/sqflite.dart';
 import 'package:path_provider/path_provider.dart';
-import 'package:sqflite_test/model/client/client.dart';
-
 class DBProvider {
   DBProvider._();
   static final DBProvider db = DBProvider._();
@@ -59,52 +57,6 @@ class DBProvider {
     final db = await database;
     var res = await db.rawDelete(query);
     return res;
-  }
+  }  
 
-  update1(String table, Map<String, dynamic> objJson,
-      {String whereClause = "", String whereArgs = ""}) async {
-    final db = await database;
-    var res = await db
-        .update(table, objJson, where: whereClause, whereArgs: [whereArgs]);
-    return res;
-  }
-
-  delete1(String table,
-      {String whereClause = "", String whereArgs = ""}) async {
-    final db = await database;
-    db.delete(table, where: "whereClause", whereArgs: [whereArgs]);
-  }
-
-  newClient(Client newClient) async {
-    final db = await database;
-    var res = await db.rawInsert("INSERT Into Client (id,first_name)"
-        " VALUES (${newClient.id},${newClient.firstName})");
-    return res;
-  }
-
-  getClient(int id) async {
-    final db = await database;
-    var res = await db.query("Client", where: "id = ?", whereArgs: [id]);
-    return res.isNotEmpty ? Client.fromJson(res.first) : Null;
-  }
-
-  getAllClients() async {
-    final db = await database;
-    var res = await db.query("Breed");
-    List<Client> list =
-        res.isNotEmpty ? res.map((c) => Client.fromJson(c)).toList() : [];
-    return res;
-  }
-
-  updateClient(Client newClient) async {
-    final db = await database;
-    var res = await db.update("Client", newClient.toJson(),
-        where: "id = ?", whereArgs: [newClient.id]);
-    return res;
-  }
-
-  deleteClient(int id) async {
-    final db = await database;
-    db.delete("Client", where: "id = ?", whereArgs: [id]);
-  }
 }

@@ -3,6 +3,7 @@ import 'package:sqflite_test/model/breed/breed.dart';
 import 'package:sqflite_test/view/add-breed/add-breed.dart';
 import 'package:sqflite_test/view/breeds-details/breed-details.dart';
 import 'package:sqflite_test/view/image-slider/image-slider.dart';
+import 'package:sqflite_test/view/update-breed/update-breed.dart';
 
 class Routes {
   BuildContext context;
@@ -23,6 +24,16 @@ class Routes {
       context,
       MaterialPageRoute(
         builder: (context) => AddBreed(),
+      ),
+    );
+  }
+
+  void toUpdateBreed(Breed breed) {
+    print(breed);
+    Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (context) => UpdateBreed(breed: breed),
       ),
     );
   }
