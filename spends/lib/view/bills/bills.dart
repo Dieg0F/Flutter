@@ -8,11 +8,11 @@ class Bills extends StatefulWidget {
   _BillsState createState() => _BillsState();
 }
 
-class _BillsState extends State<Bills> {
+class _BillsState extends State<Bills> {  
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: widgets.appBar("Bills"),
+      appBar: widgets.appBar("Meus Gastos"),
       body: BillsWidget(context: context).body(),
       floatingActionButton: widgets.floatingActionButton(
         Icons.add,

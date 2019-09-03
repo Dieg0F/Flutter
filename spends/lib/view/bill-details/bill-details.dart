@@ -6,12 +6,12 @@ import 'package:spends/view/widgets/widgets.dart' as widgets;
 
 class BillDetails extends StatelessWidget {
   Bill bill;
-  BillDetails({@required this.bill})
+  BillDetails({@required this.bill});
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: widgets.appBar("Bills"),
+      appBar: widgets.appBar("Detalhes da Conta"),
       body: BillDetailsWidget(context: context).body(),
     );
   }

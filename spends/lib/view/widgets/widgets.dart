@@ -38,6 +38,7 @@ Text basicText(String value, double fSize, Color c) {
       fontSize: fSize,
       color: c,
       decoration: TextDecoration.none,
+      fontWeight: FontWeight.w300,
     ),
   );
 }
@@ -58,7 +59,9 @@ Text lightText(String value, double fSize, Color c) {
 TextStyle inputTextStyle() {
   return TextStyle(
     color: Colors.black38,
-    fontSize: 20,
+    fontSize: 26,
+    letterSpacing: 0.5,
+    fontWeight: FontWeight.w300,
   );
 }
 

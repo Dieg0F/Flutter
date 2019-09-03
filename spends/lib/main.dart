@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:spends/view/bills/bills.dart';
 
 void main() => runApp(MyApp());
 
@@ -11,7 +12,7 @@ class MyApp extends StatelessWidget {
       theme: ThemeData(
         primarySwatch: Colors.red,
       ),
-      home: MyHomePage(title: 'Flutter Demo Home Page'),
+      home: Bills(),
     );
   }
 }
