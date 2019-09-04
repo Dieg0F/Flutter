@@ -35,7 +35,6 @@ class _AddBillState extends State<AddBill> {
   void saveBill() {
     print(addBillWidgets.bill);
     if (addBillWidgets.bill != null) {
-      addBillWidgets.bill.id = new Uuid().toString();
       bloc.saveBill(addBillWidgets.bill);
       Navigator.pop(context);
     }

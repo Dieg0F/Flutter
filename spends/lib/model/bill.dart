@@ -27,7 +27,7 @@ class BillResults {
 
 class Bill {
   String id;
-  String price;
+  double price;
   String name;
   String where;
   String when;

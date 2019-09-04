@@ -3,7 +3,7 @@ import 'package:spends/view/widgets/widgets.dart';
 
 import '../../model/bill.dart';
 
-class AddBillWidget {
+class UpdateBillWidget {
   BuildContext context;
   Bill bill = new Bill();
 
@@ -15,6 +15,11 @@ class AddBillWidget {
   FocusNode whereFocus = new FocusNode();
   FocusNode whenFocus = new FocusNode();
   FocusNode priceFocus = new FocusNode();
+
+  TextEditingController txNameController = new TextEditingController();
+  TextEditingController txWhereController = new TextEditingController();
+  TextEditingController txWhenController = new TextEditingController();
+  TextEditingController txPriceController = new TextEditingController();
 
   Container body() {
     return Container(
@@ -42,7 +47,7 @@ class AddBillWidget {
     );
   }
 
-  Container inputField(Text textLabel, TextField inputText) {
+  Container inputField(Text textLabel, TextFormField inputText) {
     return Container(
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -57,65 +62,73 @@ class AddBillWidget {
     );
   }
 
-  TextField inputName() {
-    return TextField(
-      onChanged: (String value) {
-        bill.name = value;
-      },
+  TextFormField inputName() {
+    txNameController.text = bill.name;
+    return TextFormField(
+      controller: txNameController,
       keyboardType: TextInputType.text,
       cursorColor: Colors.redAccent,
       style: inputTextStyle(),
       decoration: inputDecoration(),
-      onSubmitted: (String value) {
+      onFieldSubmitted: (String value) {
+        bill.name = value;
+      },
+      onEditingComplete: () {
         FocusScope.of(context).requestFocus(whereFocus);
       },
       autofocus: true,
     );
   }
 
-  TextField inputWhere() {
-    return TextField(
-      onChanged: (String value) {
-        bill.where = value;
-      },
+  TextFormField inputWhere() {
+    txWhereController.text = bill.where;
+    return TextFormField(
+      controller: txWhereController,
       keyboardType: TextInputType.text,
       cursorColor: Colors.redAccent,
       style: inputTextStyle(),
       decoration: inputDecoration(),
       focusNode: whereFocus,
-      onSubmitted: (String value) {
+      onFieldSubmitted: (String value) {
+        bill.where = value;
+      },
+      onEditingComplete: () {
         FocusScope.of(context).requestFocus(whenFocus);
       },
     );
   }
 
-  TextField inputWhen() {
-    return TextField(
-      onChanged: (String value) {
-        bill.when = value;
-      },
+  TextFormField inputWhen() {
+    txPriceController.text = bill.when;
+    return TextFormField(
+      controller: txWhenController,
       keyboardType: TextInputType.datetime,
       cursorColor: Colors.redAccent,
       style: inputTextStyle(),
       decoration: inputDecoration(),
       focusNode: whenFocus,
-      onSubmitted: (String value) {
+      onFieldSubmitted: (String value) {
+        bill.when = value;
+      },
+      onEditingComplete: () {
         FocusScope.of(context).requestFocus(priceFocus);
       },
     );
   }
 
-  TextField inputPrice() {
-    return TextField(
-      onChanged: (String value) {
-        bill.price = double.parse(value);
-      },
+  TextFormField inputPrice() {
+    txPriceController.text = bill.price.toString();
+    return TextFormField(
+      controller: txPriceController,
       keyboardType: TextInputType.numberWithOptions(),
       cursorColor: Colors.redAccent,
       style: inputTextStyle(),
       decoration: inputDecoration(),
       focusNode: priceFocus,
-      onSubmitted: (String value) {
+      onFieldSubmitted: (String value) {
+        bill.name = value;
+      },
+      onEditingComplete: () {
         //Save
       },
     );

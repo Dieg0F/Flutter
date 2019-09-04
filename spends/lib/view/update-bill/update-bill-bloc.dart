@@ -2,12 +2,12 @@ import 'package:spends/repository/bill-repository/bill-repository.dart';
 
 import '../../model/bill.dart';
 
-class AddBillBloc {
+class UpdateBillBloc {
   final BillRepository _repository = BillRepository();
 
-  void saveBill(Bill bill) async {
-    await _repository.save(bill);
+  void updateBill(Bill bill) async {
+    await _repository.update(bill);
   }
 }
 
-final bloc = AddBillBloc();
+final bloc = UpdateBillBloc();
