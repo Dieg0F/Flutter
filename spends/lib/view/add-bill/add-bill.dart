@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:uuid/uuid.dart';
 
 import 'add-bill-bloc.dart';
 import 'add-bill-widget.dart';

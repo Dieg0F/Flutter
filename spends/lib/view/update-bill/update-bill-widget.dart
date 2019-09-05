@@ -26,6 +26,10 @@ class UpdateBillWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: <Widget>[
+          inputDropdownField(
+            basicText("Que tipo de compra foi essa?", 28, Colors.black54),
+            dropdownType(),
+          ),
           inputField(
             basicText("Gastei com o que?", 28, Colors.black54),
             inputName(),
@@ -54,11 +58,72 @@ class UpdateBillWidget {
         children: <Widget>[
           textLabel,
           Flexible(
-            child: inputText,
+            child: Container(
+              child: inputText,
+              padding: EdgeInsets.symmetric(
+                horizontal: 8,
+                vertical: 16,
+              ),
+            ),
           ),
         ],
       ),
       height: 150,
+    );
+  }
+
+  Container inputDropdownField(Text textLabel, DropdownButton dropdownField) {
+    return Container(
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: <Widget>[
+          textLabel,
+          Flexible(
+            child: Container(
+              child: dropdownField,
+              padding: EdgeInsets.symmetric(
+                horizontal: 8,
+                vertical: 16,
+              ),
+            ),
+          ),
+        ],
+      ),
+      height: 150,
+    );
+  }
+
+  DropdownButton dropdownType() {
+    var hintText = "";
+    if (bill.type == null) {
+      hintText = "Selecione um tipo";
+    } else {
+      hintText = bill.type;
+    }
+    return DropdownButton<String>(
+      value: bill.type,
+      onChanged: (String newValue) {
+        bill.type = newValue;
+      },
+      hint: Container(
+        child: basicText(hintText, 28, Colors.black26),
+      ),
+      isExpanded: true,
+      icon: Icon(
+        Icons.keyboard_arrow_down,
+        color: Colors.black45,
+        size: 30,
+      ),
+      underline: Container(),
+      items: <String>['Transporte', 'Carro', 'Comida', 'Telefone']
+          .map<DropdownMenuItem<String>>((String value) {
+        return DropdownMenuItem<String>(
+          value: value,
+          child: Container(
+            child: basicText(value, 26, Colors.black54),
+          ),
+        );
+      }).toList(),
     );
   }
 
