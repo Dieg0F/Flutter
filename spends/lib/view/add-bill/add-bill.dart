@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:spends/model/bill.dart';
+import 'package:spends/utils/categories/categories.dart';
 
 import 'add-bill-bloc.dart';
-import 'add-bill-widget.dart';
 import 'package:spends/view/widgets/widgets.dart' as widgets;
 
 class AddBill extends StatefulWidget {
@@ -10,11 +11,15 @@ class AddBill extends StatefulWidget {
 }
 
 class _AddBillState extends State<AddBill> {
-  AddBillWidget addBillWidgets = new AddBillWidget();
+  Bill bill = new Bill();
+
+  FocusNode nameFocus = new FocusNode();
+  FocusNode whereFocus = new FocusNode();
+  FocusNode whenFocus = new FocusNode();
+  FocusNode priceFocus = new FocusNode();
 
   @override
   Widget build(BuildContext context) {
-    addBillWidgets.setContext(context);
     return Scaffold(
       appBar: widgets.appBar("Nova Conta"),
       body: bodyScroll(),
@@ -27,15 +32,169 @@ class _AddBillState extends State<AddBill> {
 
   SingleChildScrollView bodyScroll() {
     return SingleChildScrollView(
-      child: addBillWidgets.body(),
+      child: body(),
     );
   }
 
   void saveBill() {
-    print(addBillWidgets.bill);
-    if (addBillWidgets.bill != null) {
-      bloc.saveBill(addBillWidgets.bill);
+    setState(() {
+      bloc.saveBill(bill);
       Navigator.pop(context);
+    });
+  }
+
+  Container body() {
+    return Container(
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: <Widget>[
+          inputDropdownField(
+            widgets.basicText(
+                "Que tipo de compra foi essa?", 28, Colors.black54),
+            dropdownType(),
+          ),
+          inputField(
+            widgets.basicText("Gastei com o que?", 26, Colors.black54),
+            inputName(),
+          ),
+          inputField(
+            widgets.basicText("Onde fiz essa compra?", 26, Colors.black54),
+            inputWhere(),
+          ),
+          inputField(
+            widgets.basicText("Quando foi isso?", 26, Colors.black54),
+            inputWhen(),
+          ),
+          inputField(
+            widgets.basicText("E o preco?", 26, Colors.black54),
+            inputPrice(),
+          ),
+        ],
+      ),
+      padding: EdgeInsets.symmetric(horizontal: 16, vertical: 35),
+    );
+  }
+
+  Container inputField(Text textLabel, TextField inputText) {
+    return Container(
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: <Widget>[
+          textLabel,
+          Flexible(
+            child: Container(
+              child: inputText,
+              padding: EdgeInsets.symmetric(
+                horizontal: 8,
+                vertical: 16,
+              ),
+            ),
+          ),
+        ],
+      ),
+      height: 150,
+    );
+  }
+
+  Container inputDropdownField(Text textLabel, DropdownButton dropdownField) {
+    return Container(
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: <Widget>[
+          textLabel,
+          Flexible(
+            child: Container(
+              child: dropdownField,
+              padding: EdgeInsets.symmetric(
+                horizontal: 8,
+                vertical: 16,
+              ),
+            ),
+          ),
+        ],
+      ),
+      height: 150,
+    );
+  }
+
+  DropdownButton dropdownType() {
+    var hintText = "";
+    if (bill.type == null) {
+      hintText = "Selecione um tipo";
+    } else {
+      hintText = bill.type;
     }
+    return widgets.categoryDropDown(
+        hintText, updateDropdownSelection, bill.type);
+  }
+
+  updateDropdownSelection(String option) {
+    setState(() {
+      bill.type = option;
+    });
+  }
+
+  TextField inputName() {
+    return TextField(
+      onChanged: (String value) {
+        bill.name = value;
+      },
+      keyboardType: TextInputType.text,
+      cursorColor: Colors.redAccent,
+      style: widgets.inputTextStyle(),
+      decoration: widgets.inputDecoration(),
+      onSubmitted: (String value) {
+        FocusScope.of(context).requestFocus(whereFocus);
+      },
+    );
+  }
+
+  TextField inputWhere() {
+    return TextField(
+      onChanged: (String value) {
+        bill.where = value;
+      },
+      keyboardType: TextInputType.text,
+      cursorColor: Colors.redAccent,
+      style: widgets.inputTextStyle(),
+      decoration: widgets.inputDecoration(),
+      focusNode: whereFocus,
+      onSubmitted: (String value) {
+        FocusScope.of(context).requestFocus(whenFocus);
+      },
+    );
+  }
+
+  TextField inputWhen() {
+    return TextField(
+      onChanged: (String value) {
+        bill.when = value;
+      },
+      keyboardType: TextInputType.datetime,
+      cursorColor: Colors.redAccent,
+      style: widgets.inputTextStyle(),
+      decoration: widgets.inputDecoration(),
+      focusNode: whenFocus,
+      onSubmitted: (String value) {
+        FocusScope.of(context).requestFocus(priceFocus);
+      },
+      maxLength: 10,
+    );
+  }
+
+  TextField inputPrice() {
+    return TextField(
+      onChanged: (String value) {
+        bill.price = double.parse(value);
+      },
+      keyboardType: TextInputType.numberWithOptions(),
+      cursorColor: Colors.redAccent,
+      style: widgets.inputTextStyle(),
+      decoration: widgets.inputDecoration(),
+      focusNode: priceFocus,
+      onSubmitted: (String value) {
+        saveBill();
+      },
+    );
   }
 }

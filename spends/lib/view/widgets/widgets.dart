@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:spends/utils/categories/categories.dart';
 
 AppBar appBar(String title, {List<Widget> actions}) {
   return AppBar(
@@ -98,4 +99,47 @@ FloatingActionButton floatingActionButton(IconData icon, {Function action}) {
       color: Colors.white70,
     ),
   );
+}
+
+DropdownButton<String> categoryDropDown(
+    String hintText, Function action, String value) {
+  return DropdownButton<String>(
+    value: value,
+    isExpanded: true,
+    underline: Container(),
+    hint: Container(
+      child: basicText(hintText, 28, Colors.black26),
+    ),
+    icon: Icon(
+      Icons.keyboard_arrow_down,
+      color: Colors.black45,
+      size: 30,
+    ),
+    onChanged: (String newValue) {
+      action(newValue);
+    },
+    items: getAllCategories().map<DropdownMenuItem<String>>((String value) {
+      return dropdownMenuItem(value);
+    }).toList(),
+  );
+}
+
+DropdownMenuItem<String> dropdownMenuItem(String value) {
+  return DropdownMenuItem<String>(
+      value: value,
+      child: Container(
+        child: Row(
+          children: <Widget>[
+            Container(
+              child: Image.asset(getIconByCategory(value)),
+              padding: EdgeInsets.only(top: 4, right: 8, bottom: 4),
+            ),
+            Container(
+              child: basicText(value, 26, Colors.black54),
+              padding: EdgeInsets.only(top: 4, right: 8, bottom: 4),
+            ),
+          ],
+        ),
+      ),
+    );
 }
