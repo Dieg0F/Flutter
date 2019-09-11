@@ -2,6 +2,8 @@ import 'dart:io';
 
 import 'package:sqflite/sqflite.dart';
 import 'package:path_provider/path_provider.dart';
+import 'package:path/path.dart' as p;
+
 class DBProvider {
   DBProvider._();
   static final DBProvider db = DBProvider._();
@@ -27,7 +29,7 @@ class DBProvider {
 
   initDB(String table) async {
     Directory documentsDirectory = await getApplicationDocumentsDirectory();
-    String path = documentsDirectory.path + "TestDB.db";
+    String path = p.join(documentsDirectory.toString(), "TestDB.db");
     return await openDatabase(path, version: 4, onOpen: (db) {},
         onCreate: (Database db, int version) async {
       await db.execute(table);
@@ -57,6 +59,5 @@ class DBProvider {
     final db = await database;
     var res = await db.rawDelete(query);
     return res;
-  }  
-
+  }
 }

@@ -6,6 +6,7 @@ import 'package:image/image.dart' as imagePgk;
 import 'package:image/image.dart';
 import 'package:path_provider/path_provider.dart';
 
+const thumbPath = "_thumb";
 const watermark = "/watermark.png";
 const watermarkPath = "assets/icons/watermark.png";
 const watermarkHorizontalPadding = 25;
@@ -17,12 +18,45 @@ class RequestImage {
   String localPath;
 
   RequestImage(File fileImage, {int originalSize}) {
-    Image imgObject = imagePgk.decodeJpg(fileImage.readAsBytesSync());
+    Image imgObject = getImageFromFile(fileImage);
     if (imgObject.width > originalSize) {
       this.image = imagePgk.copyResize(imgObject, width: originalSize);
     } else {
       this.image = imgObject;
     }
+  }
+
+  Image getImageFromFile(File fileImage) {
+    var fileFullName = fileImage.path.split("/").last;
+    var fileType = fileFullName.split('.').last;
+    Image image;
+
+    print("Image name: " + fileFullName + " - Type: " + fileType);
+
+    switch (fileType.toLowerCase()) {
+      case "png":
+        image = imagePgk.decodePng(fileImage.readAsBytesSync());
+        break;
+      case "tiff":
+        image = imagePgk.decodeTiff(fileImage.readAsBytesSync());
+        break;
+      case "tga":
+        image = imagePgk.decodeTga(fileImage.readAsBytesSync());
+        break;
+      case "gif":
+        image = imagePgk.decodeGif(fileImage.readAsBytesSync());
+        break;
+      case "jpg":
+        image = imagePgk.decodeJpg(fileImage.readAsBytesSync());
+        break;
+      case "jpeg":
+        image = imagePgk.decodeJpg(fileImage.readAsBytesSync());
+        break;
+      default:
+        image = imagePgk.decodeImage(fileImage.readAsBytesSync());
+    }
+
+    return image;
   }
 
   Future<File> buildThumbnailImage(
@@ -37,9 +71,10 @@ class RequestImage {
     var thumbnailPath = this.localPath +
         "/" +
         pictureName +
-        "_thumbnail_" +
+        thumbPath +
         DateTime.now().millisecond.toString() +
         ".jpg";
+
     File(thumbnailPath)
         .writeAsBytesSync(imagePgk.encodeJpg(thumbnail, quality: imageQuality));
 
