@@ -11,29 +11,52 @@ class LoginPage extends StatefulWidget {
 }
 
 class _LoginPageState extends State<LoginPage> {
+  GlobalKey<ScaffoldState> _key = GlobalKey();
+
   @override
   Widget build(BuildContext context) {
-    return StreamBuilder(
-      stream: bloc.loading,
-      builder: (BuildContext context, AsyncSnapshot<bool> snapshot) {
-        if (snapshot.hasData) {
-          if (snapshot.data) {
-            return loadingWidget();
-          } else {}
-        } else {
-          return body();
-        }
-      },
+    return Scaffold(
+      key: _key,
+      body: StreamBuilder(
+        stream: bloc.loading.stream,
+        builder: (BuildContext context, AsyncSnapshot<bool> snapshot) {
+          if (snapshot.hasData) {
+            if (snapshot.data) {
+              return loadingWidget();
+            } else {
+              return body();
+            }
+          } else {
+            return body();
+          }
+        },
+      ),
     );
   }
+
+  Widget _snackSample(String message) => SnackBar(
+        content: Text(
+          message,
+          style: TextStyle(
+            color: Colors.white,
+            fontSize: 20,
+          ),
+          textAlign: TextAlign.center,
+        ),
+        backgroundColor: Colors.black54,
+      );
 
   Stack loadingWidget() {
     return Stack(
       children: <Widget>[
         body(),
         Container(
-          child: CircularProgressIndicator(),
-          color: Colors.black26,
+          child: Center(
+            child: CircularProgressIndicator(),
+          ),
+          color: Colors.black87,
+          height: MediaQuery.of(context).size.height,
+          width: MediaQuery.of(context).size.width,
         )
       ],
     );
@@ -61,8 +84,17 @@ class _LoginPageState extends State<LoginPage> {
             print("Google");
             bloc.show();
             bloc.googleAuth().whenComplete(() {
-              Routes(buildCtx: context).toProfile();
               bloc.hide();
+              setState(() {
+                if (bloc.subAuth.value != null) {
+                  final bar = _snackSample("Success!");
+                  _key.currentState.showSnackBar(bar);
+                  Routes(buildCtx: context).toProfile(bloc.subAuth.value);
+                } else {
+                  final bar = _snackSample("Error!");
+                  _key.currentState.showSnackBar(bar);
+                }
+              });
             });
           },
         ),
@@ -70,6 +102,20 @@ class _LoginPageState extends State<LoginPage> {
           child: buttonContent("Facebook"),
           onPressed: () {
             print("Facebook");
+            bloc.show();
+            bloc.facebookAuth().whenComplete(() {
+              bloc.hide();
+              setState(() {
+                if (bloc.subAuth.value != null) {
+                  final bar = _snackSample("Success!");
+                  _key.currentState.showSnackBar(bar);
+                  Routes(buildCtx: context).toProfile(bloc.subAuth.value);
+                } else {
+                  final bar = _snackSample("Error!");
+                  _key.currentState.showSnackBar(bar);
+                }
+              });
+            });
           },
         )
       ],

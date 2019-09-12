@@ -1,4 +1,6 @@
 import 'package:flutter/cupertino.dart';
+import 'package:social/model/user.dart';
+import 'package:social/views/login/login.dart';
 import 'package:social/views/profile/profile.dart';
 
 class Routes {
@@ -6,11 +8,21 @@ class Routes {
 
   Routes({this.buildCtx});
 
-  void toProfile() {
+  void toProfile(User userFromFirebase) {
     Navigator.of(buildCtx).pushReplacement(
       CupertinoPageRoute(
         builder: (context) {
-          return ProfilePage();
+          return ProfilePage(user: userFromFirebase);
+        },
+      ),
+    );
+  }
+
+  void toLogin() {
+    Navigator.of(buildCtx).pushReplacement(
+      CupertinoPageRoute(
+        builder: (context) {
+          return LoginPage();
         },
       ),
     );
