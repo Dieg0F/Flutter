@@ -8,9 +8,7 @@ class RequestProvider {
 
   RequestProvider() {
     BaseOptions options = BaseOptions(
-        receiveTimeout: 30000,
-        connectTimeout: 25000,
-        baseUrl: "https://cahtatest.inatel.br/api/v1/");
+        receiveTimeout: 30000, connectTimeout: 25000, baseUrl: "dsa");
     _dio = Dio(options);
     _setupLoggingInterceptor();
   }
@@ -29,7 +27,7 @@ class RequestProvider {
   Future<ServerResponse> post(endpoint, object) async {
     print("RequestProvider: Request data by POST");
     try {
-      Response response = await _dio.post(endpoint, data: object);      
+      Response response = await _dio.post(endpoint, data: object);
       return ServerResponse.withSuccess(response.data as Map);
     } catch (error) {
       print("RequestProvider: Exception $error");
