@@ -31,4 +31,6 @@ class User {
       email: facebookUser['email'],
       photoUrl: facebookUser['picture']['data']['url'],
       userFrom: "Facebook");
+
+  factory User.fromJson(Map<String, dynamic> serverUser) => User();
 }

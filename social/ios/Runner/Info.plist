@@ -40,8 +40,7 @@
 		<string>UIInterfaceOrientationLandscapeRight</string>
 	</array>
 	<key>UIViewControllerBasedStatusBarAppearance</key>
-	<false/>
-	<!-- Put me in the [my_project]/ios/Runner/Info.plist file -->
+	<false/>	
 	<!-- Google Sign-in Section -->
 	<key>CFBundleURLTypes</key>
 	<array>
@@ -49,13 +48,34 @@
 			<key>CFBundleTypeRole</key>
 			<string>Editor</string>
 			<key>CFBundleURLSchemes</key>
-			<array>
-				<!-- TODO Replace this value: -->
+			<array>				
 				<!-- Copied from GoogleService-Info.plist key REVERSED_CLIENT_ID -->
 				<string>com.googleusercontent.apps.1067501112993-kpcuuqlmti647pmacsis979p2dnrvasd</string>
 			</array>
 		</dict>
 	</array>
 	<!-- End of the Google Sign-in Section -->
+	<!-- Facebook Sign-in Section -->
+	<key>CFBundleURLTypes</key> 
+	<array> 
+		<dict> 
+			<key>CFBundleURLSchemes</key> 
+			<array> 
+				<string>fb921586658203054</string> 
+			</array> 
+		</dict> 
+	</array> 
+	<key>FacebookAppID</key> 
+	<string>921586658203054</string> 
+	<key>FacebookDisplayName</key> 
+	<string>SocialFlutter</string>
+	<key>LSApplicationQueriesSchemes</key> 
+	<array> 
+		<string>fbapi</string> 
+		<string>fb-messenger-share-api</string> 
+		<string>fbauth2</string> 
+		<string>fbshareextension</string> 
+	</array>
+	<!-- End of the Facebook Sign-in Section -->
 </dict>
 </plist>
