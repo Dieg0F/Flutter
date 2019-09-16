@@ -8,11 +8,11 @@ class Routes {
 
   Routes({this.buildCtx});
 
-  void toProfile(User userFromFirebase) {
+  void toProfile(User userReceived) {
     Navigator.of(buildCtx).pushReplacement(
       CupertinoPageRoute(
         builder: (context) {
-          return ProfilePage(user: userFromFirebase);
+          return ProfilePage(user: userReceived);
         },
       ),
     );

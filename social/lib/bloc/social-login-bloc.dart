@@ -14,7 +14,7 @@ class SocialLoginBloc {
       print("Response: " + response.toString());
       _subAuth.sink.add(User.fromFirebase(response));
     } else {
-      _subAuth.addError("Error on get user");
+      _subAuth.sink.addError("Error on get user");
     }
   }
 
@@ -23,15 +23,18 @@ class SocialLoginBloc {
 
     print("Response: " + response);
 
-    if (response as String == "CancelledByUser") {
+    if (response == "CancelledByUser") {
+      print("Error");
       _subAuth.addError("Canceled by User");
-    } else if (response as String == "Error on Facebook") {
+    } else if (response == "Error on Facebook") {
       _subAuth.addError("Error on Login by Facebook");
-    } else if (response as String == "Error on get Facebook Data") {
+    } else if (response == "Error on get Facebook Data") {
       _subAuth.addError("Error on get Facebook Data");
     } else {
       _subAuth.sink.add(User.fromFacebook(json.decode(response)));
     }
+
+    // _subAuth.addError("Errror");
   }
 
   Future userLogout(User user) async {

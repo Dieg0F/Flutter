@@ -6,7 +6,6 @@ import 'package:social/routes/routes.dart';
 
 import 'package:social/bloc/loading-bloc.dart';
 import 'package:social/bloc/social-login-bloc.dart';
-import 'package:social/utils/GoogleLogin/google-login.dart';
 
 class LoginPage extends StatefulWidget {
   LoginPage({Key key}) : super(key: key);
@@ -19,23 +18,7 @@ class _LoginPageState extends State<LoginPage> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      key: _key,
-      body: StreamBuilder(
-        stream: loadingBloc.loading.stream,
-        builder: (BuildContext context, AsyncSnapshot<bool> snapshot) {
-          if (snapshot.hasData) {
-            if (snapshot.data) {
-              return loadingWidget();
-            } else {
-              return body();
-            }
-          } else {
-            return body();
-          }
-        },
-      ),
-    );
+    return Scaffold(key: _key, body: body());
   }
 
   Widget _snackSample(String message) => SnackBar(
@@ -50,22 +33,6 @@ class _LoginPageState extends State<LoginPage> {
         backgroundColor: Colors.black54,
       );
 
-  Stack loadingWidget() {
-    return Stack(
-      children: <Widget>[
-        body(),
-        Container(
-          child: Center(
-            child: CircularProgressIndicator(),
-          ),
-          color: Colors.black87,
-          height: MediaQuery.of(context).size.height,
-          width: MediaQuery.of(context).size.width,
-        )
-      ],
-    );
-  }
-
   Container body() {
     return Container(
       child: Column(
@@ -75,7 +42,7 @@ class _LoginPageState extends State<LoginPage> {
           socialButtons(),
         ],
       ),
-      color: Color(0xFF3949AB),
+      color: Color(0xFF545454),
     );
   }
 
@@ -239,8 +206,8 @@ class _LoginPageState extends State<LoginPage> {
           Row(
             mainAxisAlignment: MainAxisAlignment.center,
             children: <Widget>[
-              socialButton("Google", googleLogin),
-              socialButton("Facebook", facebookLogin),
+              googleButton(),
+              facebookButton(),
             ],
           )
         ],
@@ -248,50 +215,49 @@ class _LoginPageState extends State<LoginPage> {
     );
   }
 
-  Container socialButton(String buttonText, Function onPressed) {
+  Container googleButton() {
     return Container(
       child: StreamBuilder<User>(
         stream: socialLoginBloc.subAuth.stream,
-        builder: (context, snapshot) {
+        builder: (stmContext, snapshot) {
           return FlatButton(
-            child: buttonContent(buttonText),
-            onPressed: () {
-              onPressed(snapshot, context);
-            },
-          );
+              child: buttonContent("Google"),
+              onPressed: () async {
+                await socialLoginBloc.googleAuth();
+                if (socialLoginBloc.subAuth.value != null) {
+                  Routes(buildCtx: context)
+                      .toProfile(socialLoginBloc.subAuth.value);
+                  showSnackBar("Success!");
+                } else {
+                  showSnackBar(snapshot.error.toString());
+                }
+              });
         },
       ),
     );
   }
 
-  void googleLogin(AsyncSnapshot snapshot, BuildContext context) {
-    loadingBloc.show();
-    socialLoginBloc.googleAuth().whenComplete(() {
-      login(snapshot, context);
-    });
-  }
-
-  void facebookLogin(AsyncSnapshot snapshot, BuildContext context) {
-    loadingBloc.show();
-    socialLoginBloc.facebookAuth().whenComplete(() {
-      login(snapshot, context);
-    });
-  }
-
-  void login(AsyncSnapshot snapshot, BuildContext context) {
-    loadingBloc.hide();
-    setState(() {
-      if (snapshot.hasData) {
-        if (snapshot.data != null) {
-          showSnackBar("Success!");
-          Routes(buildCtx: context).toProfile(socialLoginBloc.subAuth.value);
-        }
-      } else if (snapshot.hasError) {
-        print("Error: ${snapshot.error}");
-        showSnackBar(snapshot.error);
-      }
-      print("Error: ${snapshot.error}");
-    });
+  Container facebookButton() {
+    return Container(
+      child: StreamBuilder(
+        stream: socialLoginBloc.subAuth.stream,
+        builder: (stmContext, snapshot) {
+          return FlatButton(
+            child: buttonContent("Facebook"),
+            onPressed: () async {
+              await socialLoginBloc.facebookAuth();
+              if (socialLoginBloc.subAuth.value != null) {
+                Routes(buildCtx: context)
+                    .toProfile(socialLoginBloc.subAuth.value);
+                showSnackBar("Success!");
+              } else {
+                showSnackBar(snapshot.error.toString());
+              }
+            },
+          );
+        },
+      ),
+    );
   }
 
   void showSnackBar(String message) {
