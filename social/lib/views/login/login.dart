@@ -217,19 +217,18 @@ class _LoginPageState extends State<LoginPage> {
 
   Container googleButton() {
     return Container(
-      child: StreamBuilder<User>(
-        stream: socialLoginBloc.subAuth.stream,
-        builder: (stmContext, snapshot) {
-          return FlatButton(
+      child: FutureBuilder(
+        builder: (c, snapshot) {
+          return InkWell(
               child: buttonContent("Google"),
-              onPressed: () async {
-                await socialLoginBloc.googleAuth();
-                if (socialLoginBloc.subAuth.value != null) {
+              onTap: () async {
+                var res = await socialLoginBloc.googleAuth();
+                if (res.data != null) {
                   Routes(buildCtx: context)
-                      .toProfile(socialLoginBloc.subAuth.value);
+                      .toProfile(User.fromFirebase(res.data));
                   showSnackBar("Success!");
                 } else {
-                  showSnackBar(snapshot.error.toString());
+                  showSnackBar(res.errorMessage);
                 }
               });
         },
@@ -239,19 +238,19 @@ class _LoginPageState extends State<LoginPage> {
 
   Container facebookButton() {
     return Container(
-      child: StreamBuilder(
-        stream: socialLoginBloc.subAuth.stream,
-        builder: (stmContext, snapshot) {
-          return FlatButton(
+      child: FutureBuilder(
+        builder: (c, snap) {
+          return InkWell(
             child: buttonContent("Facebook"),
-            onPressed: () async {
-              await socialLoginBloc.facebookAuth();
-              if (socialLoginBloc.subAuth.value != null) {
+            onTap: () async {
+              var res = await socialLoginBloc.facebookAuth();
+              print(res.errorMessage);
+              if (res.data != null) {
                 Routes(buildCtx: context)
-                    .toProfile(socialLoginBloc.subAuth.value);
+                    .toProfile(User.fromFirebase(res.data));
                 showSnackBar("Success!");
               } else {
-                showSnackBar(snapshot.error.toString());
+                showSnackBar(res.errorMessage);
               }
             },
           );

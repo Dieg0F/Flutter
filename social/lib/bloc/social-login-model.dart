@@ -3,5 +3,5 @@ class LoginResponse {
   String errorMessage;
   String errorCode;
 
-  LoginResponse(this.data, this.errorMessage, {this.errorCode});
+  LoginResponse(this.data, {this.errorMessage, this.errorCode});
 }

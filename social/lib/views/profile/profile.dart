@@ -1,8 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
-import 'package:social/bloc/loading-bloc.dart';
-import 'package:social/bloc/simple-login-bloc.dart';
 import 'package:social/bloc/social-login-bloc.dart';
 
 import 'package:social/model/user.dart';
@@ -19,37 +17,8 @@ class ProfilePage extends StatefulWidget {
 class _ProfilePageState extends State<ProfilePage> {
   @override
   Widget build(BuildContext context) {
-    return StreamBuilder(
-      stream: loadingBloc.loading.stream,
-      builder: (BuildContext context, AsyncSnapshot<bool> snapshot) {
-        if (snapshot.hasData) {
-          if (snapshot.data) {
-            return loadingWidget();
-          } else if (socialLoginBloc.subAuth.value != null) {
-            return body();
-          } else {
-            return body();
-          }
-        } else {
-          return body();
-        }
-      },
-    );
-  }
-
-  Stack loadingWidget() {
-    return Stack(
-      children: <Widget>[
-        body(),
-        Container(
-          child: Center(
-            child: CircularProgressIndicator(),
-          ),
-          color: Colors.black26,
-          height: MediaQuery.of(context).size.height,
-          width: MediaQuery.of(context).size.width,
-        )
-      ],
+    return Scaffold(
+      body: body(),
     );
   }
 
@@ -75,25 +44,43 @@ class _ProfilePageState extends State<ProfilePage> {
             child: textField(widget.user.email),
             padding: EdgeInsets.symmetric(vertical: 8),
           ),
-          FlatButton(
-            child: textField("Logout"),
-            onPressed: () {
-              print("Logout");
-              loadingBloc.show();
-              if (widget.user.userFrom != "Application Server") {
-                socialLoginBloc.userLogout(widget.user).whenComplete(() {
-                  loadingBloc.hide();
-                  Routes(buildCtx: context).toLogin();
-                });
-              } else {
-                simpleLoginBloc.logout().whenComplete(() {
-                  loadingBloc.hide();
-                  Routes(buildCtx: context).toLogin();
-                });
-              }
-            },
+          Container(
+            child: InkWell(
+              child: buttonContent("Logout"),
+              onTap: () async {
+                await socialLoginBloc.userLogout(widget.user);
+                Routes(buildCtx: context).toLogin();
+              },
+              splashColor: Colors.blueGrey,
+            ),
+            margin: EdgeInsets.symmetric(vertical: 16),
           )
         ],
+      ),
+      width: MediaQuery.of(context).size.width,
+      height: MediaQuery.of(context).size.height,
+    );
+  }
+
+  Container buttonContent(String text) {
+    return Container(
+      child: Text(
+        text,
+        style: Theme.of(context).textTheme.button,
+      ),
+      decoration: BoxDecoration(
+        border: Border.all(
+          color: Colors.white30,
+          style: BorderStyle.solid,
+          width: 1,
+        ),
+        borderRadius: new BorderRadius.all(
+          Radius.circular(100),
+        ),
+      ),
+      padding: EdgeInsets.symmetric(
+        horizontal: 20,
+        vertical: 10,
       ),
     );
   }

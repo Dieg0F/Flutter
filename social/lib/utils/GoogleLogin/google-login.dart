@@ -1,12 +1,18 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:google_sign_in/google_sign_in.dart';
+import 'package:social/bloc/social-login-constants.dart';
 
 final FirebaseAuth _auth = FirebaseAuth.instance;
 final GoogleSignIn googleSignIn = GoogleSignIn();
 
-Future<FirebaseUser> signInWithGoogle() async {
+Future<Object> signInWithGoogle() async {
   try {
     final GoogleSignInAccount googleSignInAccount = await googleSignIn.signIn();
+
+    if (googleSignInAccount == null) {
+      return SocialLoginConstants.canceledByUser;
+    }
+
     final GoogleSignInAuthentication googleSignInAuthentication =
         await googleSignInAccount.authentication;
 
@@ -26,8 +32,7 @@ Future<FirebaseUser> signInWithGoogle() async {
 
     return user;
   } catch (e) {
-    print(e.toString());
-    return null;
+    return SocialLoginConstants.defaultGoogleError;
   }
 }
 
