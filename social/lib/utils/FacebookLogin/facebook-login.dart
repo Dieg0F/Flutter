@@ -1,6 +1,6 @@
 import 'package:flutter_facebook_login/flutter_facebook_login.dart';
 import 'package:http/http.dart' as http;
-import 'package:social/bloc/social-login-constants.dart';
+import 'package:social/bloc/login-constants.dart';
 
 const graphAPI =
     "https://graph.facebook.com/v2.12/me?fields=name,first_name,last_name,email,picture.height(200)&access_token=";

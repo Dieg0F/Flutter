@@ -1,11 +1,10 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:social/bloc/simple-login-bloc.dart';
 import 'package:social/model/user.dart';
 import 'package:social/routes/routes.dart';
 
 import 'package:social/bloc/loading-bloc.dart';
-import 'package:social/bloc/social-login-bloc.dart';
+import 'package:social/bloc/login-bloc.dart';
 
 class LoginPage extends StatefulWidget {
   LoginPage({Key key}) : super(key: key);
@@ -65,10 +64,10 @@ class _LoginPageState extends State<LoginPage> {
   Container formFieldEmail() {
     return Container(
       child: StreamBuilder(
-        stream: simpleLoginBloc.email,
+        stream: loginBloc.email,
         builder: (context, snapshot) {
           return TextField(
-            onChanged: simpleLoginBloc.emailChanged,
+            onChanged: loginBloc.emailChanged,
             keyboardType: TextInputType.emailAddress,
             style: TextStyle(
               fontSize: 17,
@@ -86,10 +85,10 @@ class _LoginPageState extends State<LoginPage> {
   Container formFieldPass() {
     return Container(
       child: StreamBuilder(
-        stream: simpleLoginBloc.pass,
+        stream: loginBloc.pass,
         builder: (context, snapshot) {
           return TextField(
-            onChanged: simpleLoginBloc.passChanged,
+            onChanged: loginBloc.passChanged,
             keyboardType: TextInputType.emailAddress,
             obscureText: true,
             style: TextStyle(
@@ -149,40 +148,18 @@ class _LoginPageState extends State<LoginPage> {
 
   Container formButton() {
     return Container(
-      child: StreamBuilder<bool>(
-        stream: simpleLoginBloc.submitCheck,
+      child: FutureBuilder(
         builder: (c, snapshot) {
-          return FlatButton(
-            child: Text(
-              "LOGIN",
-              style: Theme.of(context).textTheme.button,
-            ),
-            color: Color(0xFF4CAF50),
-            focusColor: Color(0x334CAF50),
-            padding: EdgeInsets.symmetric(horizontal: 25, vertical: 8),
-            onPressed: () async {
-              if (snapshot.hasData) {
-                if (snapshot.data) {
-                  loadingBloc.show();
-                  await simpleLoginBloc.login();
-                  setState(() {
-                    loadingBloc.hide();
-                    if (simpleLoginBloc.userLogged.value != null) {
-                      final bar = _snackSample("Success!");
-                      _key.currentState.showSnackBar(bar);
-                      Routes(buildCtx: context)
-                          .toProfile(simpleLoginBloc.userLogged.value);
-                    } else {
-                      final bar = _snackSample("Error!");
-                      _key.currentState.showSnackBar(bar);
-                    }
-                  });
-                }
+          return InkWell(
+            child: buttonContent("LOGIN"),
+            onTap: () async {
+              await loginBloc.formLogin();
+              if (loginBloc.loginResponse.value.data != null) {
+                Routes(buildCtx: context)
+                    .toProfile(loginBloc.loginResponse.value.data);
+                showSnackBar("Success!");
               } else {
-                setState(() {
-                  final bar = _snackSample("Verifique os campos!");
-                  _key.currentState.showSnackBar(bar);
-                });
+                showSnackBar(loginBloc.loginResponse.value.errorMessage);
               }
             },
           );
@@ -222,17 +199,18 @@ class _LoginPageState extends State<LoginPage> {
           return InkWell(
               child: buttonContent("Google"),
               onTap: () async {
-                var res = await socialLoginBloc.googleAuth();
-                if (res.data != null) {
-                  Routes(buildCtx: context)
-                      .toProfile(User.fromFirebase(res.data));
+                await loginBloc.googleLogin();
+                if (loginBloc.loginResponse.value.data != null) {
+                  Routes(buildCtx: context).toProfile(
+                      User.fromFirebase(loginBloc.loginResponse.value.data));
                   showSnackBar("Success!");
                 } else {
-                  showSnackBar(res.errorMessage);
+                  showSnackBar(loginBloc.loginResponse.value.errorMessage);
                 }
               });
         },
       ),
+      margin: EdgeInsets.symmetric(horizontal: 16),
     );
   }
 
@@ -243,19 +221,19 @@ class _LoginPageState extends State<LoginPage> {
           return InkWell(
             child: buttonContent("Facebook"),
             onTap: () async {
-              var res = await socialLoginBloc.facebookAuth();
-              print(res.errorMessage);
-              if (res.data != null) {
-                Routes(buildCtx: context)
-                    .toProfile(User.fromFirebase(res.data));
+              await loginBloc.facebookLogin();
+              if (loginBloc.loginResponse.value.data != null) {
+                Routes(buildCtx: context).toProfile(
+                    User.fromFacebook(loginBloc.loginResponse.value.data));
                 showSnackBar("Success!");
               } else {
-                showSnackBar(res.errorMessage);
+                showSnackBar(loginBloc.loginResponse.value.errorMessage);
               }
             },
           );
         },
       ),
+      margin: EdgeInsets.symmetric(horizontal: 16),
     );
   }
 

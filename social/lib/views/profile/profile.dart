@@ -1,7 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
-import 'package:social/bloc/social-login-bloc.dart';
+import 'package:social/bloc/login-bloc.dart';
 
 import 'package:social/model/user.dart';
 
@@ -48,7 +48,7 @@ class _ProfilePageState extends State<ProfilePage> {
             child: InkWell(
               child: buttonContent("Logout"),
               onTap: () async {
-                await socialLoginBloc.userLogout(widget.user);
+                await loginBloc.logout(widget.user.userFrom);
                 Routes(buildCtx: context).toLogin();
               },
               splashColor: Colors.blueGrey,
