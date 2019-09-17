@@ -1,6 +1,8 @@
 import 'dart:convert';
+import 'dart:io';
 
 import 'package:dio/dio.dart';
+import 'package:social/data/server/request-constants.dart';
 import 'package:social/model/server-response.dart';
 
 class RequestProvider {
@@ -8,7 +10,13 @@ class RequestProvider {
 
   RequestProvider() {
     BaseOptions options = BaseOptions(
-        receiveTimeout: 30000, connectTimeout: 25000, baseUrl: "dsa");
+        receiveTimeout: 30000,
+        connectTimeout: 25000,
+        contentType: ContentType.json,
+        headers: {
+          "Accept": "application/json",
+        },
+        baseUrl: "");
     _dio = Dio(options);
     _setupLoggingInterceptor();
   }
@@ -48,6 +56,7 @@ class RequestProvider {
       onResponse: (Response response) {
         print(
             "<-- ${response.statusCode} ${response.request.method} ${response.request.path}");
+        print("Response: ${response.data}");
         String responseAsString = response.data.toString();
         if (responseAsString.length > maxCharactersPerLine) {
           int iterations =
@@ -79,33 +88,32 @@ class RequestProvider {
       if (type is DioErrorType) {
         switch (type) {
           case DioErrorType.CANCEL:
-            errorDescription = "Request to API server was cancelled";
+            errorDescription = RequestConstants.cancelledMessage;
             break;
           case DioErrorType.SEND_TIMEOUT:
-            errorDescription = "Request timeout with API server";
+            errorDescription = RequestConstants.sendTimeoutMessage;
             break;
           case DioErrorType.CONNECT_TIMEOUT:
-            errorDescription = "Connection timeout with API server";
+            errorDescription = RequestConstants.sendTimeoutMessage;
             break;
           case DioErrorType.DEFAULT:
-            errorDescription =
-                "Connection to API server failed due to internet connection";
+            errorDescription = RequestConstants.defaultErrorMessage;
             break;
           case DioErrorType.RECEIVE_TIMEOUT:
-            errorDescription = "Receive timeout in connection with API server";
+            errorDescription = RequestConstants.receiveTimeoutMessage;
             break;
           case DioErrorType.RESPONSE:
-            errorDescription = "Received invalid status!";
+            errorDescription = RequestConstants.serverResponseError;
             break;
         }
       } else {
         errorDescription = error.response.statusMessage;
       }
       return ServerResponse.withError(
-          errorDescription, error.response.statusCode);
+          error.response.data, errorDescription, error.response.statusCode);
     } catch (e) {
       print(e);
-      return ServerResponse.withError("Parse Error", -1);
+      return ServerResponse.withError(null, "Error on parse response", 0);
     }
   }
 }

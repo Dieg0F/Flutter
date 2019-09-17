@@ -10,7 +10,7 @@ Future<Object> signInWithGoogle() async {
     final GoogleSignInAccount googleSignInAccount = await googleSignIn.signIn();
 
     if (googleSignInAccount == null) {
-      return SocialLoginConstants.canceledByUser;
+      return LoginConstants.canceledByUser;
     }
 
     final GoogleSignInAuthentication googleSignInAuthentication =
@@ -32,7 +32,7 @@ Future<Object> signInWithGoogle() async {
 
     return user;
   } catch (e) {
-    return SocialLoginConstants.defaultGoogleError;
+    return LoginConstants.defaultGoogleError;
   }
 }
 

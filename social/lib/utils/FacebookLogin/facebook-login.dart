@@ -13,11 +13,11 @@ Future<String> signInWithFacebook() async {
   switch (facebookLoginResult.status) {
     case FacebookLoginStatus.error:
       print("FacebookLoginStatus: Error on Login by Facebook");
-      return SocialLoginConstants.defaultFacebookError;
+      return LoginConstants.defaultFacebookError;
       break;
     case FacebookLoginStatus.cancelledByUser:
       print("FacebookLoginStatus: CancelledByUser");
-      return SocialLoginConstants.canceledByUser;
+      return LoginConstants.canceledByUser;
       break;
     case FacebookLoginStatus.loggedIn:
       try {
@@ -27,11 +27,11 @@ Future<String> signInWithFacebook() async {
 
         return graphResponse.body;
       } catch (error) {
-        return SocialLoginConstants.requestFacebookDataError;
+        return LoginConstants.requestFacebookDataError;
       }
       break;
     default:
-      return SocialLoginConstants.defaultFacebookError;
+      return LoginConstants.defaultFacebookError;
   }
 }
 

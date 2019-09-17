@@ -29,11 +29,31 @@ class LoginBloc extends Object with Validators {
     var userEmail = _emailController.value;
     var userPass = _passController.value;
 
-    await _loginRepository.formLogin(userEmail, userPass);
+    bool hasError = false;
+
+    if (userEmail == "" || userEmail == null) {
+      _emailController.sink.addError("Email must not be empty");
+      hasError = true;
+    }
+
+    if (userPass == "" || userPass == null) {
+      _passController.sink.addError("Password must not be empty");
+      hasError = true;
+    }
+
+    if (hasError == false) {
+      _loginResponse.sink
+          .add(await _loginRepository.formLogin(userEmail, userPass));
+    } else {
+      _loginResponse.value = null;
+    }
   }
 
   Future logout(String userFrom) async {
     await _loginRepository.userLogout(userFrom);
+    _loginResponse.value = null;
+    _emailController.value = null;
+    _passController.value = null;
   }
 
   dispose() {

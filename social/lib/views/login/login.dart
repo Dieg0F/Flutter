@@ -3,8 +3,8 @@ import 'package:flutter/material.dart';
 import 'package:social/model/user.dart';
 import 'package:social/routes/routes.dart';
 
-import 'package:social/bloc/loading-bloc.dart';
 import 'package:social/bloc/login-bloc.dart';
+import 'package:social/views/dialogs/dialogs.dart';
 
 class LoginPage extends StatefulWidget {
   LoginPage({Key key}) : super(key: key);
@@ -14,6 +14,7 @@ class LoginPage extends StatefulWidget {
 
 class _LoginPageState extends State<LoginPage> {
   GlobalKey<ScaffoldState> _key = GlobalKey();
+  Dialogs dialogs = new Dialogs();
 
   @override
   Widget build(BuildContext context) {
@@ -151,15 +152,19 @@ class _LoginPageState extends State<LoginPage> {
       child: FutureBuilder(
         builder: (c, snapshot) {
           return InkWell(
-            child: buttonContent("LOGIN"),
+            child: buttonContentLogin("LOGIN"),
             onTap: () async {
+              dialogs.showLoading(context, "Realizando Login");
               await loginBloc.formLogin();
-              if (loginBloc.loginResponse.value.data != null) {
-                Routes(buildCtx: context)
-                    .toProfile(loginBloc.loginResponse.value.data);
-                showSnackBar("Success!");
-              } else {
-                showSnackBar(loginBloc.loginResponse.value.errorMessage);
+              dialogs.hideLoading(context);
+              if (loginBloc.loginResponse.value != null) {
+                if (loginBloc.loginResponse.value.hasError != null) {
+                  showSnackBar(loginBloc.loginResponse.value.errorMessage);
+                } else {
+                  User user = loginBloc.loginResponse.value.data;
+                  Routes(buildCtx: context).toProfile(user);
+                  showSnackBar("Success!");
+                }
               }
             },
           );
@@ -199,7 +204,10 @@ class _LoginPageState extends State<LoginPage> {
           return InkWell(
               child: buttonContent("Google"),
               onTap: () async {
+                await dialogs.showLoading(
+                    context, "Realizando login com Google");
                 await loginBloc.googleLogin();
+                await dialogs.hideLoading(context);
                 if (loginBloc.loginResponse.value.data != null) {
                   Routes(buildCtx: context).toProfile(
                       User.fromFirebase(loginBloc.loginResponse.value.data));
@@ -221,7 +229,9 @@ class _LoginPageState extends State<LoginPage> {
           return InkWell(
             child: buttonContent("Facebook"),
             onTap: () async {
+              dialogs.showLoading(context, "Realizando login com Facebook");
               await loginBloc.facebookLogin();
+              dialogs.hideLoading(context);
               if (loginBloc.loginResponse.value.data != null) {
                 Routes(buildCtx: context).toProfile(
                     User.fromFacebook(loginBloc.loginResponse.value.data));
@@ -240,6 +250,37 @@ class _LoginPageState extends State<LoginPage> {
   void showSnackBar(String message) {
     final bar = _snackSample(message);
     _key.currentState.showSnackBar(bar);
+  }
+
+  Container buttonContentLogin(String text) {
+    return Container(
+      child: Center(
+        child: buttonText(text),
+      ),
+      decoration: BoxDecoration(
+        border: Border.all(
+          color: Colors.green,
+          style: BorderStyle.solid,
+          width: 1,
+        ),
+        borderRadius: new BorderRadius.all(
+          Radius.circular(100),
+        ),
+        color: Colors.green,
+      ),
+      padding: EdgeInsets.symmetric(
+        horizontal: 20,
+        vertical: 10,
+      ),
+      width: MediaQuery.of(context).size.width * 0.75,
+    );
+  }
+
+  Text buttonText(String text) {
+    return Text(
+      text,
+      style: Theme.of(context).textTheme.button,
+    );
   }
 
   Container buttonContent(String text) {
