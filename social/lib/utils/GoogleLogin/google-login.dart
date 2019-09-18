@@ -1,17 +1,24 @@
+import 'dart:async';
+
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:social/bloc/login-constants.dart';
+import 'package:social/bloc/login-utils.dart';
 
 final FirebaseAuth _auth = FirebaseAuth.instance;
 final GoogleSignIn googleSignIn = GoogleSignIn();
 
 Future<Object> signInWithGoogle() async {
   try {
+    Completer completer = Completer();
     final GoogleSignInAccount googleSignInAccount = await googleSignIn.signIn();
 
     if (googleSignInAccount == null) {
       return LoginConstants.canceledByUser;
     }
+
+    Timer timer =
+        LoginUtils.requestTimeout(completer, LoginConstants.connectionTimeout);
 
     final GoogleSignInAuthentication googleSignInAuthentication =
         await googleSignInAccount.authentication;
@@ -30,9 +37,15 @@ Future<Object> signInWithGoogle() async {
     final FirebaseUser currentUser = await _auth.currentUser();
     assert(user.uid == currentUser.uid);
 
-    return user;
+    completer.complete(user);
+    timer.cancel();
+    return completer.future;
   } catch (e) {
-    return LoginConstants.defaultGoogleError;
+    if (e == LoginConstants.connectionTimeout) {
+      return LoginConstants.connectionTimeout;
+    } else {
+      return LoginConstants.defaultGoogleError;
+    }
   }
 }
 
@@ -40,4 +53,12 @@ Future signOutGoogle() async {
   await googleSignIn.signOut();
 
   print("User Sign Out");
+}
+
+Timer requestTimeout(Completer completer) {
+  Timer timer;
+  timer = Timer(const Duration(seconds: 15), () {
+    completer.completeError(LoginConstants.requestFacebookDataError);
+  });
+  return timer;
 }

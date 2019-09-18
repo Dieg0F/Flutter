@@ -34,12 +34,10 @@ class LoginRepository {
       var response = await signInWithFacebook();
       print("Response: " + response);
 
-      if (response == LoginConstants.canceledByUser ||
-          response == LoginConstants.requestFacebookDataError ||
-          response == LoginConstants.defaultFacebookError) {
+      if (response is String) {
         return LoginResponse(null, hasError: true, errorMessage: response);
       } else {
-        return LoginResponse(jsonDecode(response));
+        return LoginResponse(response);
       }
     } else {
       return noInternetConnectionReponse();

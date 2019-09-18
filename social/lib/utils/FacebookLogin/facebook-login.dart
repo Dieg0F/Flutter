@@ -1,6 +1,10 @@
+import 'dart:async';
+import 'dart:convert';
+
 import 'package:flutter_facebook_login/flutter_facebook_login.dart';
 import 'package:http/http.dart' as http;
 import 'package:social/bloc/login-constants.dart';
+import 'package:social/bloc/login-utils.dart';
 
 const graphAPI =
     "https://graph.facebook.com/v2.12/me?fields=name,first_name,last_name,email,picture.height(200)&access_token=";
@@ -8,6 +12,7 @@ const graphAPI =
 final FacebookLogin facebookLogin = FacebookLogin();
 
 Future<String> signInWithFacebook() async {
+  Completer completer = Completer();
   var facebookLoginResult =
       await facebookLogin.logInWithReadPermissions(['email']);
   switch (facebookLoginResult.status) {
@@ -22,11 +27,17 @@ Future<String> signInWithFacebook() async {
     case FacebookLoginStatus.loggedIn:
       try {
         print("FacebookLoginStatus: LoggedIn");
+        Timer timer = LoginUtils.requestTimeout(
+            completer, LoginConstants.connectionTimeout);
         var graphResponse =
             await http.get('$graphAPI${facebookLoginResult.accessToken.token}');
 
-        return graphResponse.body;
+        timer.cancel();
+        completer.complete(jsonDecode(graphResponse.body));
+
+        return completer.future;
       } catch (error) {
+        print("Error >> " + error.toString());
         return LoginConstants.requestFacebookDataError;
       }
       break;

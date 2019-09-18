@@ -8,15 +8,15 @@ import 'package:social/model/server-response.dart';
 class RequestProvider {
   Dio _dio;
 
-  RequestProvider() {
+  RequestProvider({baseUrl}) {
     BaseOptions options = BaseOptions(
-        receiveTimeout: 30000,
+        receiveTimeout: 100,
         connectTimeout: 25000,
         contentType: ContentType.json,
         headers: {
           "Accept": "application/json",
         },
-        baseUrl: "");
+        baseUrl: "https://cahtatest.inatel.br/api/v1/");
     _dio = Dio(options);
     _setupLoggingInterceptor();
   }
@@ -85,6 +85,8 @@ class RequestProvider {
     String errorDescription = "";
     try {
       var type = error.type;
+      var responseData;
+      var statusCode;
       if (type is DioErrorType) {
         switch (type) {
           case DioErrorType.CANCEL:
@@ -94,7 +96,7 @@ class RequestProvider {
             errorDescription = RequestConstants.sendTimeoutMessage;
             break;
           case DioErrorType.CONNECT_TIMEOUT:
-            errorDescription = RequestConstants.sendTimeoutMessage;
+            errorDescription = RequestConstants.connectionTimeoutMessage;
             break;
           case DioErrorType.DEFAULT:
             errorDescription = RequestConstants.defaultErrorMessage;
@@ -104,15 +106,20 @@ class RequestProvider {
             break;
           case DioErrorType.RESPONSE:
             errorDescription = RequestConstants.serverResponseError;
+            responseData = error.response.data;
+            statusCode = error.response.statusCode;
             break;
         }
       } else {
         errorDescription = error.response.statusMessage;
       }
       return ServerResponse.withError(
-          error.response.data, errorDescription, error.response.statusCode);
+        responseData,
+        errorDescription,
+        statusCode,
+      );
     } catch (e) {
-      print(e);
+      print("Error: $e");
       return ServerResponse.withError(null, "Error on parse response", 0);
     }
   }
