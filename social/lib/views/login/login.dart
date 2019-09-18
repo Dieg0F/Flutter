@@ -14,7 +14,7 @@ class LoginPage extends StatefulWidget {
 
 class _LoginPageState extends State<LoginPage> {
   GlobalKey<ScaffoldState> _key = GlobalKey();
-  Dialogs dialogs = new Dialogs();
+  Dialogs dialogs;
 
   @override
   Widget build(BuildContext context) {
@@ -154,9 +154,10 @@ class _LoginPageState extends State<LoginPage> {
           return InkWell(
             child: buttonContentLogin("LOGIN"),
             onTap: () async {
-              dialogs.showLoading(context, "Realizando Login");
+              dialogs = new Dialogs(ctx: c);
+              dialogs.showLoading("Realizando Login");
               await loginBloc.formLogin();
-              dialogs.hideLoading(context);
+              dialogs.hideLoading();
               if (loginBloc.loginResponse.value != null) {
                 if (loginBloc.loginResponse.value.hasError != null) {
                   showSnackBar(loginBloc.loginResponse.value.errorMessage);
@@ -204,10 +205,10 @@ class _LoginPageState extends State<LoginPage> {
           return InkWell(
               child: buttonContent("Google"),
               onTap: () async {
-                await dialogs.showLoading(
-                    context, "Realizando login com Google");
+                dialogs = new Dialogs(ctx: c);
+                dialogs.showLoading("Realizando login com Google");
                 await loginBloc.googleLogin();
-                await dialogs.hideLoading(context);
+                dialogs.hideLoading();
                 if (loginBloc.loginResponse.value.data != null) {
                   Routes(buildCtx: context).toProfile(
                       User.fromFirebase(loginBloc.loginResponse.value.data));
@@ -229,9 +230,10 @@ class _LoginPageState extends State<LoginPage> {
           return InkWell(
             child: buttonContent("Facebook"),
             onTap: () async {
-              dialogs.showLoading(context, "Realizando login com Facebook");
+              dialogs = new Dialogs(ctx: c);
+              dialogs.showLoading("Realizando login com Facebook");
               await loginBloc.facebookLogin();
-              dialogs.hideLoading(context);
+              dialogs.hideLoading();
               if (loginBloc.loginResponse.value.data != null) {
                 Routes(buildCtx: context).toProfile(
                     User.fromFacebook(loginBloc.loginResponse.value.data));

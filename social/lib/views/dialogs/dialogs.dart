@@ -3,11 +3,15 @@ import 'package:flutter/material.dart';
 class Dialogs {
   bool isLoading = false;
 
-  showLoading(BuildContext ctx, String message) {
+  BuildContext ctx;
+
+  Dialogs({this.ctx});
+
+  showLoading(String message) {
     print("Showing Loading");
     isLoading = true;
     return showDialog(
-      barrierDismissible: true,
+      barrierDismissible: false,
       context: ctx,
       builder: (buildrCtx) {
         return AlertDialog(
@@ -58,7 +62,7 @@ class Dialogs {
     );
   }
 
-  hideLoading(BuildContext ctx) {
+  hideLoading() {
     if (isLoading) {
       print("Hiding Loading");
       Navigator.pop(ctx);
