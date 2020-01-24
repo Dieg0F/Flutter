@@ -5,7 +5,7 @@ AppBar appBar(String title, {List<Widget> actions}) {
   return AppBar(
     title: Text(title),
     actions: actions,
-    backgroundColor: Colors.red,
+    backgroundColor: Colors.teal[400],
   );
 }
 
@@ -14,7 +14,7 @@ Container basicButton(String textButton, {Function action}) {
     margin: new EdgeInsets.all(50),
     child: MaterialButton(
       child: basicButtonText(textButton),
-      color: Colors.red,
+      color: Colors.teal,
       onPressed: () {
         action();
       },
@@ -39,8 +39,9 @@ Text basicText(String value, double fSize, Color c) {
       fontSize: fSize,
       color: c,
       decoration: TextDecoration.none,
-      fontWeight: FontWeight.w300,
+      fontWeight: FontWeight.w300,      
     ),
+    textAlign: TextAlign.center,
   );
 }
 
@@ -98,6 +99,7 @@ FloatingActionButton floatingActionButton(IconData icon, {Function action}) {
       icon,
       color: Colors.white70,
     ),
+    backgroundColor: Colors.teal[500],
   );
 }
 

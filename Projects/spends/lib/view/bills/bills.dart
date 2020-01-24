@@ -54,8 +54,24 @@ class _BillsState extends State<Bills> with SingleTickerProviderStateMixin {
                 ],
               );
             } else {
-              return Center(
-                child: widgets.basicText("isEmpty", 35, Colors.black26),
+              return Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: <Widget>[
+                  Icon(
+                    Icons.add,
+                    color: Colors.black26,
+                    size: 48,
+                  ),
+                  Container(
+                    child: Center(
+                      child: widgets.basicText(
+                          "Clique no botão abaixo para adicionar uma nova conta!",
+                          25,
+                          Colors.black26),
+                    ),
+                    padding: new EdgeInsets.all(20),
+                  ),
+                ],
               );
             }
           } else {
@@ -89,7 +105,7 @@ class _BillsState extends State<Bills> with SingleTickerProviderStateMixin {
                   return widgets.basicText(
                       "R\$ ${_animation.value.toStringAsFixed(1)}",
                       35,
-                      Colors.red);
+                      Colors.red[400]);
                 },
               ),
               padding: new EdgeInsetsDirectional.fromSTEB(0, 8, 0, 8),
@@ -136,7 +152,7 @@ class _BillsState extends State<Bills> with SingleTickerProviderStateMixin {
                 Icons.delete_forever,
                 color: Colors.white70,
               ),
-              color: Colors.red.withOpacity(0.8),
+              color: Colors.teal.withOpacity(0.8),
             ),
             onDismissed: (direction) {
               bloc.removeBill(bill);
@@ -167,7 +183,7 @@ class _BillsState extends State<Bills> with SingleTickerProviderStateMixin {
                 padding: new EdgeInsetsDirectional.fromSTEB(0, 4, 0, 8),
               ),
               Container(
-                child: widgets.basicText("R\$ ${bill.price}", 28, Colors.red),
+                child: widgets.basicText("R\$ ${bill.price}", 28, Colors.red[400]),
                 padding: new EdgeInsetsDirectional.fromSTEB(0, 8, 0, 8),
               ),
             ],

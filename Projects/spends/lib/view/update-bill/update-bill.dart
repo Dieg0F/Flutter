@@ -158,7 +158,7 @@ class _UpdateBillState extends State<UpdateBill> {
     return TextFormField(
       controller: txNameController,
       keyboardType: TextInputType.text,
-      cursorColor: Colors.redAccent,
+      cursorColor: Colors.tealAccent,
       style: widgets.inputTextStyle(),
       decoration: widgets.inputDecoration(),
       focusNode: whereFocus,
@@ -176,7 +176,7 @@ class _UpdateBillState extends State<UpdateBill> {
     return TextFormField(
       controller: txWhereController,
       keyboardType: TextInputType.text,
-      cursorColor: Colors.redAccent,
+      cursorColor: Colors.tealAccent,
       style: widgets.inputTextStyle(),
       decoration: widgets.inputDecoration(),
       focusNode: whereFocus,
@@ -194,7 +194,7 @@ class _UpdateBillState extends State<UpdateBill> {
     return TextFormField(
       controller: txWhenController,
       keyboardType: TextInputType.datetime,
-      cursorColor: Colors.redAccent,
+      cursorColor: Colors.tealAccent,
       style: widgets.inputTextStyle(),
       decoration: widgets.inputDecoration(),
       focusNode: whenFocus,
@@ -212,7 +212,7 @@ class _UpdateBillState extends State<UpdateBill> {
     return TextFormField(
       controller: txPriceController,
       keyboardType: TextInputType.numberWithOptions(),
-      cursorColor: Colors.redAccent,
+      cursorColor: Colors.tealAccent,
       style: widgets.inputTextStyle(),
       decoration: widgets.inputDecoration(),
       focusNode: priceFocus,

@@ -163,7 +163,7 @@ class _BillDetailsState extends State<BillDetails>
               return widgets.basicText(
                 "R\$ ${_animation.value.toStringAsFixed(1)}",
                 60,
-                Colors.red,
+                Colors.red[400],
               );
             },
           ),

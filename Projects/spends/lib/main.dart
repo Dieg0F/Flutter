@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:spends/view/bills/bills.dart';
+import 'package:spends/view/main-values/main-values.dart';
 
 void main() => runApp(MyApp());
 
@@ -10,9 +11,9 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       title: 'Flutter Demo',
       theme: ThemeData(
-        primarySwatch: Colors.red,
+        primarySwatch: Colors.teal,
       ),
-      home: Bills(),
+      home: MainValues(),
     );
   }
 }

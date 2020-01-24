@@ -140,7 +140,7 @@ class _AddBillState extends State<AddBill> {
         bill.name = value;
       },
       keyboardType: TextInputType.text,
-      cursorColor: Colors.redAccent,
+      cursorColor: Colors.teal[200],
       style: widgets.inputTextStyle(),
       decoration: widgets.inputDecoration(),
       onSubmitted: (String value) {
@@ -155,7 +155,7 @@ class _AddBillState extends State<AddBill> {
         bill.where = value;
       },
       keyboardType: TextInputType.text,
-      cursorColor: Colors.redAccent,
+      cursorColor: Colors.teal[200],
       style: widgets.inputTextStyle(),
       decoration: widgets.inputDecoration(),
       focusNode: whereFocus,
@@ -171,7 +171,7 @@ class _AddBillState extends State<AddBill> {
         bill.when = value;
       },
       keyboardType: TextInputType.datetime,
-      cursorColor: Colors.redAccent,
+      cursorColor: Colors.teal[200],
       style: widgets.inputTextStyle(),
       decoration: widgets.inputDecoration(),
       focusNode: whenFocus,
@@ -188,7 +188,7 @@ class _AddBillState extends State<AddBill> {
         bill.price = double.parse(value);
       },
       keyboardType: TextInputType.numberWithOptions(),
-      cursorColor: Colors.redAccent,
+      cursorColor: Colors.teal[200],
       style: widgets.inputTextStyle(),
       decoration: widgets.inputDecoration(),
       focusNode: priceFocus,
