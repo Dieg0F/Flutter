@@ -27,7 +27,7 @@ class _BillsState extends State<Bills> with SingleTickerProviderStateMixin {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: widgets.appBar("Meus Gastos"),
+      appBar: widgets.appBar("Minhas contas"),
       body: body(),
       floatingActionButton: widgets.floatingActionButton(
         Icons.add,
@@ -183,7 +183,8 @@ class _BillsState extends State<Bills> with SingleTickerProviderStateMixin {
                 padding: new EdgeInsetsDirectional.fromSTEB(0, 4, 0, 8),
               ),
               Container(
-                child: widgets.basicText("R\$ ${bill.price}", 28, Colors.red[400]),
+                child:
+                    widgets.basicText("R\$ ${bill.price}", 28, Colors.red[400]),
                 padding: new EdgeInsetsDirectional.fromSTEB(0, 8, 0, 8),
               ),
             ],

@@ -2,12 +2,22 @@ import 'package:flutter/material.dart';
 import 'package:spends/model/bill.dart';
 import 'package:spends/view/add-bill/add-bill.dart';
 import 'package:spends/view/bill-details/bill-details.dart';
+import 'package:spends/view/bills/bills.dart';
 import 'package:spends/view/update-bill/update-bill.dart';
 
 class Routes {
   BuildContext context;
 
   Routes({@required this.context});
+
+  void toBills() {
+    Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (context) => Bills(),
+      ),
+    );
+  }
 
   void toBillDetails(Bill bill) {
     Navigator.push(
