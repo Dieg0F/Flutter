@@ -152,7 +152,7 @@ class _BillsState extends State<Bills> with SingleTickerProviderStateMixin {
                 Icons.delete_forever,
                 color: Colors.white70,
               ),
-              color: Colors.teal.withOpacity(0.8),
+              color: Colors.red.withOpacity(0.8),
             ),
             onDismissed: (direction) {
               bloc.removeBill(bill);
