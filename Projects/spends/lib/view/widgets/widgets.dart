@@ -39,7 +39,7 @@ Text basicText(String value, double fSize, Color c) {
       fontSize: fSize,
       color: c,
       decoration: TextDecoration.none,
-      fontWeight: FontWeight.w300,      
+      fontWeight: FontWeight.w300,
     ),
     textAlign: TextAlign.center,
   );
@@ -128,20 +128,20 @@ DropdownButton<String> categoryDropDown(
 
 DropdownMenuItem<String> dropdownMenuItem(String value) {
   return DropdownMenuItem<String>(
-      value: value,
-      child: Container(
-        child: Row(
-          children: <Widget>[
-            Container(
-              child: Image.asset(getIconByCategory(value)),
-              padding: EdgeInsets.only(top: 4, right: 8, bottom: 4),
-            ),
-            Container(
-              child: basicText(value, 26, Colors.black54),
-              padding: EdgeInsets.only(top: 4, right: 8, bottom: 4),
-            ),
-          ],
-        ),
+    value: value,
+    child: Container(
+      child: Row(
+        children: <Widget>[
+          Container(
+            child: Image.asset(getIconByCategory(value)),
+            padding: EdgeInsets.only(top: 4, right: 8, bottom: 4),
+          ),
+          Container(
+            child: basicText(value, 26, Colors.black54),
+            padding: EdgeInsets.only(top: 4, right: 8, bottom: 4),
+          ),
+        ],
       ),
-    );
+    ),
+  );
 }

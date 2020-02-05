@@ -26,6 +26,7 @@ dependencies:
   localstorage: ^2.0.0
   uuid: 2.0.1
   rxdart: ^0.20.0
+  intl: ^0.16.1
 
 dev_dependencies:
   flutter_test:

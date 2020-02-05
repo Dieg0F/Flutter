@@ -12,6 +12,7 @@ class Bills extends StatefulWidget {
 class _BillsState extends State<Bills> with SingleTickerProviderStateMixin {
   AnimationController _controller;
   Animation<double> _animation;
+  Animation<double> _mAnimation;
 
   @override
   initState() {
@@ -21,13 +22,14 @@ class _BillsState extends State<Bills> with SingleTickerProviderStateMixin {
       duration: const Duration(milliseconds: 500),
     );
     _animation = _controller;
+    _mAnimation = _controller;
     super.initState();
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: widgets.appBar("Minhas contas"),
+      appBar: widgets.appBar("Minhas contas", actions: actionsAppBar()),
       body: body(),
       floatingActionButton: widgets.floatingActionButton(
         Icons.add,
@@ -36,6 +38,15 @@ class _BillsState extends State<Bills> with SingleTickerProviderStateMixin {
         },
       ),
     );
+  }
+
+  List<Widget> actionsAppBar() {
+    return [
+      IconButton(
+        icon: Icon(Icons.calendar_today, color: Colors.white60),
+        onPressed: () {},
+      ),
+    ];
   }
 
   Container body() {
@@ -86,32 +97,66 @@ class _BillsState extends State<Bills> with SingleTickerProviderStateMixin {
 
   Container billsTotal(List<Bill> bills) {
     double total = 0;
+    double money = 3369.0;
     bills.forEach((item) => total += item.price);
     _controller.forward(from: 0.0);
     updateTotalPriceCount(total);
+    _controller.forward(from: 0.0);
+    updateTotalMoneyPriceCount((money - total));
     return Container(
-      child: Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: <Widget>[
-            Container(
-              child: widgets.basicText("Total que gastei", 25, Colors.black26),
-              padding: new EdgeInsetsDirectional.fromSTEB(0, 8, 0, 8),
+      child: Row(
+        children: <Widget>[
+          Container(
+            width: MediaQuery.of(context).size.width * 0.5,
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: <Widget>[
+                Container(
+                  child:
+                      widgets.basicText("Gasto neste mês", 20, Colors.black26),
+                  padding: new EdgeInsetsDirectional.fromSTEB(0, 4, 0, 4),
+                ),
+                Container(
+                  child: new AnimatedBuilder(
+                    animation: _animation,
+                    builder: (BuildContext context, Widget child) {
+                      return widgets.basicText(
+                          "R\$ ${_animation.value.toStringAsFixed(1)}",
+                          28,
+                          Colors.red[400]);
+                    },
+                  ),
+                  padding: new EdgeInsetsDirectional.fromSTEB(0, 4, 0, 4),
+                ),
+              ],
             ),
-            Container(
-              child: new AnimatedBuilder(
-                animation: _animation,
-                builder: (BuildContext context, Widget child) {
-                  return widgets.basicText(
-                      "R\$ ${_animation.value.toStringAsFixed(1)}",
-                      35,
-                      Colors.red[400]);
-                },
-              ),
-              padding: new EdgeInsetsDirectional.fromSTEB(0, 8, 0, 8),
+          ),
+          Container(
+            width: MediaQuery.of(context).size.width * 0.5,
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: <Widget>[
+                Container(
+                  child: widgets.basicText(
+                      "Disponivel no mês", 20, Colors.black26),
+                  padding: new EdgeInsetsDirectional.fromSTEB(0, 4, 0, 4),
+                ),
+                Container(
+                  child: new AnimatedBuilder(
+                    animation: _mAnimation,
+                    builder: (BuildContext context, Widget child) {
+                      return widgets.basicText(
+                          "R\$ ${_mAnimation.value.toStringAsFixed(1)}",
+                          28,
+                          Colors.green[400]);
+                    },
+                  ),
+                  padding: new EdgeInsetsDirectional.fromSTEB(0, 4, 0, 4),
+                ),
+              ],
             ),
-          ],
-        ),
+          ),
+        ],
       ),
       decoration: BoxDecoration(
         color: Colors.white,
@@ -123,13 +168,23 @@ class _BillsState extends State<Bills> with SingleTickerProviderStateMixin {
           ),
         ),
       ),
-      height: MediaQuery.of(context).size.height * 0.2,
+      height: MediaQuery.of(context).size.height * 0.15,
     );
   }
 
   void updateTotalPriceCount(double total) {
     _animation = new Tween<double>(
       begin: _animation.value,
+      end: total,
+    ).animate(new CurvedAnimation(
+      curve: Curves.fastOutSlowIn,
+      parent: _controller,
+    ));
+  }
+
+  void updateTotalMoneyPriceCount(double total) {
+    _mAnimation = new Tween<double>(
+      begin: _mAnimation.value,
       end: total,
     ).animate(new CurvedAnimation(
       curve: Curves.fastOutSlowIn,
@@ -179,12 +234,8 @@ class _BillsState extends State<Bills> with SingleTickerProviderStateMixin {
                 padding: new EdgeInsetsDirectional.fromSTEB(0, 8, 0, 0),
               ),
               Container(
-                child: widgets.basicText(bill.where, 14, Colors.black26),
-                padding: new EdgeInsetsDirectional.fromSTEB(0, 4, 0, 8),
-              ),
-              Container(
-                child:
-                    widgets.basicText("R\$ ${bill.price}", 28, Colors.red[400]),
+                child: widgets.basicText(
+                    "R\$ ${bill.price}", 28, Colors.purple[300]),
                 padding: new EdgeInsetsDirectional.fromSTEB(0, 8, 0, 8),
               ),
             ],

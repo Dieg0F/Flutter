@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
+import 'package:intl/intl.dart';
 import 'package:spends/routes/routes.dart';
 
 import 'package:spends/view/widgets/widgets.dart' as widgets;
@@ -14,6 +15,9 @@ class MainValues extends StatefulWidget {
 class _MainValuesState extends State<MainValues> {
   @override
   Widget build(BuildContext context) {
+    DateTime now = DateTime.now();
+    String dateNow = DateFormat('dd/MM/yyyy').format(now);
+
     return Scaffold(
       body: Container(
         child: Column(
@@ -52,7 +56,7 @@ class _MainValuesState extends State<MainValues> {
                           Colors.black26,
                         ),
                         widgets.basicText(
-                          "24/01/2020",
+                          dateNow,
                           18,
                           Colors.black45,
                         ),
@@ -114,7 +118,7 @@ class _MainValuesState extends State<MainValues> {
                 ],
               ),
               width: MediaQuery.of(context).size.width,
-              height: MediaQuery.of(context).size.height * 0.25,
+              height: MediaQuery.of(context).size.height * 0.21,
               decoration: BoxDecoration(
                 border: Border(
                   bottom: BorderSide(
@@ -186,24 +190,11 @@ class _MainValuesState extends State<MainValues> {
                               "Minhas contas", 18, Colors.white60),
                         ],
                       ),
-                      height: MediaQuery.of(context).size.height * 0.08,
-                      width: MediaQuery.of(context).size.width * 0.5,
+                      height: MediaQuery.of(context).size.height * 0.12,
+                      width: MediaQuery.of(context).size.width,
                       decoration: BoxDecoration(
                         color: Colors.teal[400],
                       ),
-                    ),
-                  ),
-                  Container(
-                    child: Column(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: <Widget>[
-                        widgets.basicText("Histórico", 18, Colors.white60),
-                      ],
-                    ),
-                    height: MediaQuery.of(context).size.height * 0.08,
-                    width: MediaQuery.of(context).size.width * 0.5,
-                    decoration: BoxDecoration(
-                      color: Colors.teal[400],
                     ),
                   ),
                 ],
